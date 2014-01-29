@@ -36,7 +36,7 @@ var Argument = function(name, description, options) {
   }else if(typeof options == 'function'){
     this._converter = options;
   }
-  this._names = this._name.split(/\s+/);
+  this._names = this._name.split(/[ ,|]+/);
   this._key = this.getKey();
 }
 
