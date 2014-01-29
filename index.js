@@ -50,7 +50,7 @@ Argument.prototype.initialize = function(options) {
   this._names = this._name.split(/\s+/);
 }
 
-Argument.prototype.__defineGetter('names', function() {
+Argument.prototype.__defineGetter__('names', function() {
   return this._names;
 });
 
