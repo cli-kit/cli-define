@@ -74,12 +74,18 @@ Argument.prototype.__defineGetter__('names', function() {
 });
 
 properties.forEach(function(prop) {
-  Argument.prototype.__defineGetter__(prop, function() {
-    return this['_' + prop];
-  });
-  Argument.prototype.__defineSetter__(prop, function(value) {
-    this['_' + prop] = value;
-  });
+  //Argument.prototype.__defineGetter__(prop, function() {
+    //return this['_' + prop];
+  //});
+  //Argument.prototype.__defineSetter__(prop, function(value) {
+    //this['_' + prop] = value;
+  //});
+  Argument.prototype[prop] = function(value) {
+    var key = '_' + prop;
+    if(!value) return this[key];
+    this[key] = value;
+    if(value) return this;
+  }
 });
 
 /**
