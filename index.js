@@ -36,6 +36,26 @@ var Argument = function(name, description, options) {
   }else if(typeof options == 'function'){
     this._converter = options;
   }
+  this._names = this._name.split(/\s+/);
+  this._key = this.getKey();
+}
+
+Argument.prototype.getKey = function() {
+  var k, i, v;
+  for(i = 0;i < this._names.length;i++) {
+    v = this._names[i];
+    k = this.camelcase(v.replace(/^-+/, ''));
+    if(/^--[^-]/.test(v)) {
+      return k;
+    }
+  }
+  return k;
+}
+
+Argument.prototype.camelcase = function(name) {
+  return name.split('-').reduce(function(str, word){
+    return str + word[0].toUpperCase() + word.slice(1);
+  });
 }
 
 /**
@@ -47,7 +67,6 @@ Argument.prototype.initialize = function(options) {
   for(var z in options) {
     this[z] = options[z];
   }
-  this._names = this._name.split(/\s+/);
 }
 
 Argument.prototype.__defineGetter__('names', function() {
@@ -150,7 +169,6 @@ Program.prototype.version = function(version, name, description, action) {
   name = name || '-V --version';
   var flag = new Flag(
     name, description || 'print the program version', {action: action});
-  flag.key = 'version';
   this.flag(flag);
   return this;
 }
@@ -170,7 +188,6 @@ Program.prototype.help = function(name, description, action) {
   name = name || '-h --help';
   var flag = new Flag(
     name, description || 'print usage information', {action: action});
-  flag.key = 'help';
   this.flag(flag);
   return this;
 }
