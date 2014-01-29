@@ -105,8 +105,8 @@ util.inherits(Flag, Argument);
  */
 var Command = function() {
   Argument.apply(this, arguments);
-  this.commands = {};
-  this.arguments = {};
+  this._commands = {};
+  this._arguments = {};
 }
 
 util.inherits(Command, Argument);
@@ -117,7 +117,7 @@ util.inherits(Command, Argument);
 Command.prototype.command = function(name, description, options) {
   var opt = (name instanceof Command) ? name
     : new Command(name, description, options);
-  this.commands[opt.key] = opt;
+  this._commands[opt.key] = opt;
   return this;
 }
 
@@ -127,7 +127,7 @@ Command.prototype.command = function(name, description, options) {
 Command.prototype.option = function(name, description, options) {
   var opt = (name instanceof Option) ? name
     : new Option(name, description, options);
-  this.arguments[opt.key] = opt;
+  this._arguments[opt.key] = opt;
   return this;
 }
 
@@ -137,7 +137,7 @@ Command.prototype.option = function(name, description, options) {
 Command.prototype.flag = function(name, description, options) {
   var opt = (name instanceof Flag) ? name
     : new Flag(name, description, options);
-  this.arguments[opt.key] = opt;
+  this._arguments[opt.key] = opt;
   return this;
 }
 
@@ -148,6 +148,7 @@ var Program = function() {
   Command.apply(this, arguments);
   this._version = '0.0.1';
   this._author = null;
+  delete this._names;
 }
 
 util.inherits(Program, Command);
@@ -208,7 +209,7 @@ properties.forEach(function(prop) {
 function create(package, name, description) {
   if(fs.existsSync(package)) {
     try {
-      var pkg = root.package = require(package);
+      var pkg = root._package = require(package);
       root._version = pkg.version;
       if(pkg.author) root._author = pkg.author;
       if(pkg.description) root._description = pkg.description;
@@ -221,9 +222,9 @@ function create(package, name, description) {
   return root;
 }
 
-root.Command = Command;
-root.Option = Option;
-root.Flag = Flag;
-
 module.exports = create;
 module.exports.cli = root;
+module.exports.Command = Command;
+module.exports.Option = Option;
+module.exports.Flag = Flag;
+
