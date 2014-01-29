@@ -17,7 +17,7 @@ var properties = [
  *
  *  @param name The argument name.
  *  @param description The argument description.
- *  @param options The argument options.
+ *  @param options The argument options or conversion function.
  */
 var Argument = function(name, description, options) {
   if(typeof name == 'object') options = name;
@@ -29,7 +29,11 @@ var Argument = function(name, description, options) {
   this._value = '';
   this._validator = null;
   this._converter = null;
-  this.initialize(options);
+  if(typeof options == 'object' && !Array.isArray(options)) {
+    this.initialize(options);
+  }else if(typeof options == 'function'){
+    this._converter = options;
+  }
 }
 
 /**

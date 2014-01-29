@@ -7,7 +7,7 @@ describe('cli-define:', function() {
     cli
       .flag('-v --verbose', 'print more information')
       .flag('-h --help', 'print help')
-      .flag('-V -- version', 'print program version')
+      .flag('-V --version', 'print program version')
       .command('ls', 'list files')
       .command('rm', 'remove files')
       .command('add', 'create a file')
