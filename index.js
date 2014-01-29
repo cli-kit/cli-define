@@ -3,15 +3,17 @@ var path = require('path'), basename = path.basename;
 var util = require('util');
 var properties = [
   'name',
-  'description',
+  //'description',
   'key',
   'id',
   'required',
   'value',
   'validator',
   'converter',
-  'action'
+  //'action'
 ];
+
+var methods = ['description', 'action'];
 
 /**
  *  Abstract super class.
@@ -74,19 +76,26 @@ Argument.prototype.__defineGetter__('names', function() {
 });
 
 properties.forEach(function(prop) {
-  //Argument.prototype.__defineGetter__(prop, function() {
-    //return this['_' + prop];
-  //});
-  //Argument.prototype.__defineSetter__(prop, function(value) {
-    //this['_' + prop] = value;
-  //});
+  Argument.prototype.__defineGetter__(prop, function() {
+    return this['_' + prop];
+  });
+  Argument.prototype.__defineSetter__(prop, function(value) {
+    this['_' + prop] = value;
+  });
+});
+
+methods.forEach(function(prop) {
   Argument.prototype[prop] = function(value) {
+    //console.dir('mutator called: ' + value);
     var key = '_' + prop;
     if(!value) return this[key];
+    //console.dir('mutator called: ' + key);
     this[key] = value;
+    //console.dir('mutator called: ' + this[key]);
     if(value) return this;
   }
 });
+
 
 /**
  *  Represents an option argument.
@@ -124,7 +133,7 @@ Command.prototype.command = function(name, description, options) {
   var opt = (name instanceof Command) ? name
     : new Command(name, description, options);
   this._commands[opt.key] = opt;
-  return this;
+  return description ? this : opt;
 }
 
 /**

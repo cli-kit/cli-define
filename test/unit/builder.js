@@ -11,8 +11,14 @@ describe('cli-define:', function() {
       .command('rm', 'remove files')
       .command('add', 'create a file')
       .option('-f --file', 'files to modify')
+      .command('print')
+        .description('print command line arguments')
+        .action(function() {
+          console.log(cli._name + ' %s', cli._args.raw.join(' '));
+      })
     expect(cli.description).to.be.a('function');
     expect(cli.action).to.be.a('function');
+    //console.dir(cli._commands.print);
     done();
   });
 })
