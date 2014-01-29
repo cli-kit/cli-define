@@ -115,7 +115,9 @@ util.inherits(Command, Argument);
  *  Define a command argument.
  */
 Command.prototype.command = function(name, description, options) {
-  this.commands[name] = new Command(name, description, options);
+  var opt = (name instanceof Command) ? name
+    : new Command(name, description, options);
+  this.commands[opt.key] = opt;
   return this;
 }
 
@@ -123,10 +125,9 @@ Command.prototype.command = function(name, description, options) {
  *  Define an option argument.
  */
 Command.prototype.option = function(name, description, options) {
-  var key = name;
-  if(name instanceof Option) key = name.key || name.name;
-  this.arguments[key] =
-    (name instanceof Option) ? name : new Option(name, description, options);
+  var opt = (name instanceof Option) ? name
+    : new Option(name, description, options);
+  this.arguments[opt.key] = opt;
   return this;
 }
 
@@ -134,10 +135,9 @@ Command.prototype.option = function(name, description, options) {
  *  Define a flag option.
  */
 Command.prototype.flag = function(name, description, options) {
-  var key = name;
-  if(name instanceof Flag) key = name.key || name.name;
-  this.arguments[key] =
-    (name instanceof Flag) ? name : new Flag(name, description, options);
+  var opt = (name instanceof Flag) ? name
+    : new Flag(name, description, options);
+  this.arguments[opt.key] = opt;
   return this;
 }
 
