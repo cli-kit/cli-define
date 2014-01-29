@@ -51,7 +51,7 @@ Argument.prototype.initialize = function(options) {
 
 properties.forEach(function(prop) {
   Argument.prototype.__defineGetter__(prop, function() {
-    return this[prop];
+    return this['_' + prop];
   });
   Argument.prototype.__defineSetter__(prop, function(value) {
     this['_' + prop] = value;
@@ -99,7 +99,9 @@ Command.prototype.command = function(name, description, options) {
  *  Define an option argument.
  */
 Command.prototype.option = function(name, description, options) {
-  this.arguments[name] =
+  var key = name;
+  if(name instanceof Option) key = name.key || name.name;
+  this.arguments[key] =
     (name instanceof Option) ? name : new Option(name, description, options);
   return this;
 }
@@ -108,7 +110,9 @@ Command.prototype.option = function(name, description, options) {
  *  Define a flag option.
  */
 Command.prototype.flag = function(name, description, options) {
-  this.arguments[name] =
+  var key = name;
+  if(name instanceof Flag) key = name.key || name.name;
+  this.arguments[key] =
     (name instanceof Flag) ? name : new Flag(name, description, options);
   return this;
 }
@@ -139,7 +143,10 @@ Program.prototype.version = function(version, name, description, action) {
   }
   if(version) this._version = version;
   name = name || '-V --version';
-  this.flag(name, description || 'print the program version', {action: action});
+  var flag = new Flag(
+    name, description || 'print the program version', {action: action});
+  flag.key = 'version';
+  this.flag(flag);
   return this;
 }
 
@@ -156,7 +163,10 @@ Program.prototype.help = function(name, description, action) {
     name = null;
   }
   name = name || '-h --help';
-  this.flag(name, description || 'print usage information', {action: action});
+  var flag = new Flag(
+    name, description || 'print usage information', {action: action});
+  flag.key = 'help';
+  this.flag(flag);
   return this;
 }
 
