@@ -10,6 +10,7 @@ var properties = [
   'value',
   'validator',
   'converter',
+  'extra'
   //'action'
 ];
 
@@ -39,6 +40,10 @@ var Argument = function(name, description, options) {
     this._converter = options;
   }
   this._names = this._name.split(/[ ,|]+/);
+  if(this._names.length > 2) {
+    this._extra = this._names.slice(2).join(' ');
+    this._names = this._names.slice(0, 2);
+  }
   this._key = this.getKey();
 }
 
