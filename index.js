@@ -170,6 +170,7 @@ Program.prototype.version = function(version, name, description, action) {
   name = name || '-V --version';
   var flag = new Flag(
     name, description || 'print the program version', {action: action});
+  flag.key = 'version';
   this.flag(flag);
   return this;
 }
@@ -189,6 +190,7 @@ Program.prototype.help = function(name, description, action) {
   name = name || '-h --help';
   var flag = new Flag(
     name, description || 'print usage information', {action: action});
+  flag.key = 'help';
   this.flag(flag);
   return this;
 }

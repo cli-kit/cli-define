@@ -11,7 +11,7 @@ describe('cli-define:', function() {
       .command('rm', 'remove files')
       .command('add', 'create a file')
       .option('-f --file', 'files to modify')
-    console.dir(cli);
+    //console.dir(cli);
     done();
   });
 })
