@@ -1,6 +1,6 @@
 # Define
 
-Defines the argument for a command line interface.
+Defines the arguments for a command line interface.
 
 ## License
 
