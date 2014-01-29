@@ -1,6 +1,6 @@
 {
   "name": "cli-define",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Define the arguments for a command line interface",
   "author": "muji <noop@xpm.io>",
   "repository": {

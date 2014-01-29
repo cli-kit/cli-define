@@ -168,10 +168,22 @@ var Program = function() {
   Command.apply(this, arguments);
   this._version = '0.0.1';
   this._author = null;
+  this._usage = null;
   delete this._names;
+  delete this._extra;
 }
 
 util.inherits(Program, Command);
+
+/**
+ *  Set the program usage string.
+ *
+ *  @param usage Program usage.
+ */
+Program.prototype.usage = function(usage) {
+  this._usage = usage;
+  return this;
+}
 
 /**
  *  Adds a version flag to the program.
