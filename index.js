@@ -9,7 +9,8 @@ var properties = [
   'required',
   'value',
   'validator',
-  'converter'
+  'converter',
+  'action'
 ];
 
 /**
@@ -29,6 +30,7 @@ var Argument = function(name, description, options) {
   this._value = '';
   this._validator = null;
   this._converter = null;
+  this._action = null;
   if(typeof options == 'object' && !Array.isArray(options)) {
     this.initialize(options);
   }else if(typeof options == 'function'){
@@ -111,7 +113,54 @@ Command.prototype.flag = function(name, description, options) {
   return this;
 }
 
-var root = new Command(basename(process.argv[1]));
+/**
+ *  Represents the program.
+ */
+var Program = function() {
+  Command.apply(this, arguments);
+  this._version = '0.0.1';
+  this._author = null;
+}
+
+util.inherits(Program, Command);
+
+/**
+ *  Adds a version flag to the program.
+ *
+ *  @param version A specific version number.
+ *  @param name The argument name.
+ *  @param description The argument description.
+ *  @param action A function to invoke.
+ */
+Program.prototype.version = function(version, name, description, action) {
+  if(typeof version == 'function') {
+    action = version;
+    version = null;
+  }
+  if(version) this._version = version;
+  name = name || '-V --version';
+  this.flag(name, description || 'print the program version', {action: action});
+  return this;
+}
+
+/**
+ *  Adds a help flag to the program.
+ *
+ *  @param name The argument name.
+ *  @param description The argument description.
+ *  @param action A function to invoke.
+ */
+Program.prototype.help = function(name, description, action) {
+  if(typeof name == 'function') {
+    action = name;
+    name = null;
+  }
+  name = name || '-h --help';
+  this.flag(name, description || 'print usage information', {action: action});
+  return this;
+}
+
+var root = new Program(basename(process.argv[1]));
 properties.forEach(function(prop) {
   if(prop != 'name' && prop != 'description') delete root['_' + prop];
 })
@@ -128,9 +177,9 @@ function create(package, name, description) {
   if(fs.existsSync(package)) {
     try {
       var pkg = root.package = require(package);
-      root.version = pkg.version;
-      if(pkg.author) root.author = pkg.author;
-      if(pkg.description) root.description = pkg.description;
+      root._version = pkg.version;
+      if(pkg.author) root._author = pkg.author;
+      if(pkg.description) root._description = pkg.description;
     }catch(e) {
       console.error('package parse error %s (malformed json)', package);
     }
