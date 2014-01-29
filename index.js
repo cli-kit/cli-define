@@ -47,7 +47,12 @@ Argument.prototype.initialize = function(options) {
   for(var z in options) {
     this[z] = options[z];
   }
+  this._names = this._name.split(/\s+/);
 }
+
+Argument.prototype.__defineGetter('names', function() {
+  return this._names;
+});
 
 properties.forEach(function(prop) {
   Argument.prototype.__defineGetter__(prop, function() {
