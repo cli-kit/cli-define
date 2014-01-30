@@ -26,9 +26,8 @@ cli
   .help()
 cli.command('install')
   .description('install a package')
-  .action(function(cmd, args) {
-    console.dir(this);
-  })
+  .action(function(cmd, args) {})
+console.dir(cli);
 ```
 
 ### Module
