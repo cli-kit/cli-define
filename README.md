@@ -136,13 +136,15 @@ If `description` is specified returns the `Program` otherwise the `Command` inst
 #### option(name, [description], [options])
 
 ```
-cli.option('-d', 'debug')                         // => Flag
-cli.option('--debug', 'debug')                    // => Flag
-cli.option('-v --verbose', 'verbose')             // => Flag
-cli.option('--port [n]', 'port')                  // => Optional option
-cli.option('--port [n]', 'port', 8080)            // => Optional option w/default
-cli.option('--port <n>', 'port', parseInt)        // => Required option w/coercion
-cli.option('--port [n]', 'port', 8080, parseInt)  // => Optional option w/default+coercion
+cli.option('-d', 'debug')                             // => Flag
+cli.option('--debug', 'debug')                        // => Flag
+cli.option('-v --verbose', 'verbose')                 // => Flag
+cli.option('--port [n]', 'port')                      // => Optional option
+cli.option('--port [n]', 'port', 8080)                // => Optional option w/default
+cli.option('--port <n>', 'port', parseInt)            // => Required option w/coercion
+cli.option('--port [n]', 'port', 8080, parseInt)      // => Optional option w/default+coercion
+cli.option('--port [n]', 'port', parseInt, 8080)      // => ^^^
+cli.option('--port [n]', 'port', parseInt, validator) // => Required options w/coercion+validate
 ```
 
 Adds an option to the command.
