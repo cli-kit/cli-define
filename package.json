@@ -1,6 +1,6 @@
 {
   "name": "cli-define",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Define the arguments for a command line interface",
   "author": "muji <noop@xpm.io>",
   "repository": {
@@ -19,6 +19,9 @@
     "argument",
     "option"
   ],
+  "dependencies": {
+    "cli-util": "~1.0.0"
+  },
   "devDependencies": {
     "mocha": "~1.17.0",
     "chai": "~1.8.1"

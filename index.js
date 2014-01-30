@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path'), basename = path.basename;
 var util = require('util');
+var camelcase = require('cli-util').camelcase;
 var properties = [
   'name',
   //'description',
@@ -51,18 +52,12 @@ Argument.prototype.getKey = function() {
   var k, i, v;
   for(i = 0;i < this._names.length;i++) {
     v = this._names[i];
-    k = this.camelcase(v.replace(/^-+/, ''));
+    k = camelcase(v.replace(/^-+/, ''));
     if(/^--[^-]/.test(v)) {
       return k;
     }
   }
   return k;
-}
-
-Argument.prototype.camelcase = function(name) {
-  return name.split('-').reduce(function(str, word){
-    return str + word[0].toUpperCase() + word.slice(1);
-  });
 }
 
 /**
