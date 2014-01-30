@@ -54,7 +54,7 @@ program.help('--help')
 program.help(function(help){help.call(this)})
 ```
 
-Adds a help flag to the program, scope for the callback is the program instance access to the entire program data is available via `this`.
+Adds a help flag to the program, scope for the callback is the program instance access to the program is available via `this`.
 
 * `name`: A specific name for the help option flags, default is `-h | --help`.
 * `description`: A specific description for the option, overrides the default.
@@ -83,7 +83,7 @@ program.version('1.0.0', '--version')
 program.version(function(version){version.call(this)})
 ```
 
-Adds a version flag to the program, scope for the callback is the program instance access to the entire program data is available via `this`, configured version number is available via `this._version`.
+Adds a version flag to the program, scope for the callback is the program instance access to the program is available via `this`, configured version number is available via `this._version`.
 
 * `version`: A specific version for the program, overrides any version extracted from `package.json`.
 * `name`: A specific name for the version option flags, default is `-V | --version`.
