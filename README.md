@@ -61,9 +61,9 @@ The program version.
 #### help([name], [description], [action])
 
 ```
-program.help()
-program.help('--help')
-program.help(function(help){help.call(this)})
+cli.help()
+cli.help('--help')
+cli.help(function(help){help.call(this)})
 ```
 
 Adds a help flag to the program, scope for the callback is the program instance access to the program is available via `this`.
@@ -77,7 +77,7 @@ Returns the program for chaining.
 #### usage(usage)
 
 ```
-program.usage('[command] [options] <files...>')
+cli.usage('[command] [options] <files...>')
 ```
 
 Sets a custom program usage string, overrides the default behaviour. 
@@ -89,10 +89,10 @@ Returns the program for chaining.
 #### version([version], [name], [description], [action])
 
 ```
-program.version()
-program.version('1.0.0')
-program.version('1.0.0', '--version')
-program.version(function(version){version.call(this)})
+cli.version()
+cli.version('1.0.0')
+cli.version('1.0.0', '--version')
+cli.version(function(version){version.call(this)})
 ```
 
 Adds a version flag to the program, scope for the callback is the program instance access to the program is available via `this`, configured version number is available via `this._version`.
@@ -119,8 +119,8 @@ Map of non-command options.
 #### command(name, [description], [options])
 
 ```
-program.command('install', 'install a package')
-program.command('install')
+cli.command('install', 'install a package')
+cli.command('install')
   .description('install a package')
   .action(function(cmd, args){})
 ```
@@ -136,9 +136,13 @@ If `description` is specified returns the `Program` otherwise the `Command` inst
 #### option(name, [description], [options])
 
 ```
-program.option('-f --file', 'file to install')
-program.option('-f, --file', 'file to install')
-program.option('-f | --file', 'file to install')
+cli.option('-d', 'debug')                         // => Flag
+cli.option('--debug', 'debug')                    // => Flag
+cli.option('-v --verbose', 'verbose')             // => Flag
+cli.option('--port [n]', 'port')                  // => Optional option
+cli.option('--port [n]', 'port', 8080)            // => Optional option w/default
+cli.option('--port <n>', 'port', parseInt)        // => Required option w/coercion
+cli.option('--port [n]', 'port', 8080, parseInt)  // => Optional option w/default+coercion
 ```
 
 Adds an option to the command.
@@ -152,9 +156,9 @@ Returns the parent `Command` for chaining.
 #### flag(name, [description], [options])
 
 ```
-program.flag('-v --verbose', 'print more information')
-program.flag('-v, --verbose', 'print more information')
-program.flag('-v | --verbose', 'print more information')
+cli.flag('-v --verbose', 'print more information')
+cli.flag('-v, --verbose', 'print more information')
+cli.flag('-v | --verbose', 'print more information')
 ```
 
 Adds a flag option to the command.

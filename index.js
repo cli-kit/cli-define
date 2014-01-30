@@ -38,7 +38,11 @@ var Argument = function(name, description, options) {
   }else if(typeof options == 'function'){
     this._converter = options;
     if(arguments.length > 3 && this._value === undefined) {
-      this._value = arguments[3];
+      if(typeof(arguments[3]) == 'function') {
+        this._validator = arguments[3];
+      }else{
+        this._value = arguments[3];
+      }
     }
   }else {
     this._value = options;
