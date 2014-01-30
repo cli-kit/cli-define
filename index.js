@@ -126,12 +126,12 @@ util.inherits(Option, Argument);
 var Flag = function() {
   Argument.apply(this, arguments);
   this._value = false;
-  var re = /^no/;
-  if(re.test(this._key)) {
-    this._value = true;
-    this._key = this._key.replace(re, '');
-    this._key = this._key.charAt(0).toLowerCase() + this._key.slice(1);
-  }
+  //var re = /^no/;
+  //if(re.test(this._key)) {
+    //this._value = true;
+    //this._key = this._key.replace(re, '');
+    //this._key = this._key.charAt(0).toLowerCase() + this._key.slice(1);
+  //}
 }
 
 util.inherits(Flag, Argument);
