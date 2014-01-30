@@ -8,24 +8,9 @@ var Command = require('../..').Command;
 describe('cli-define:', function() {
   it('should define executable commands', function(done) {
     cli
-      .version()
-      .help()
-      .option('-v --verbose', 'print more information')
       .command('ls', 'list files')
       .command('rm', 'remove files')
-      .command('add', 'create a file')
-      .option('-f --file <file>', 'files to modify')
-      .command('print')
-        .description('print command line arguments')
-        .action(function() {
-          console.log(cli._name + ' %s', cli._args.raw.join(' '));
-      })
-    expect(cli.description).to.be.a('function');
-    expect(cli.action).to.be.a('function');
-    expect(cli._arguments.version).to.be.an
-      .instanceof(Flag);
-    expect(cli._arguments.file).to.be.an
-      .instanceof(Option);
+      .command('add', 'create a file');
     expect(cli._commands.ls).to.be.an
       .instanceof(Command);
     expect(cli._commands.rm).to.be.an
@@ -36,28 +21,46 @@ describe('cli-define:', function() {
   });
   it('should define action commands', function(done) {
     cli
-      .option('-v --verbose', 'print more information')
-      .command('ls', 'list files')
-      .command('rm', 'remove files')
-      .command('add', 'create a file')
-      .option('-f --file <file>', 'files to modify')
       .command('print')
-        .description('print command line arguments')
-        .action(function() {
-          console.log(cli._name + ' %s', cli._args.raw.join(' '));
-      })
-    expect(cli.description).to.be.a('function');
-    expect(cli.action).to.be.a('function');
-    expect(cli._arguments.version).to.be.an
-      .instanceof(Flag);
-    expect(cli._arguments.file).to.be.an
-      .instanceof(Option);
-    expect(cli._commands.ls).to.be.an
+        .description('print some data')
+        .action(function(cmd, args) {});
+    cli
+      .command('cat')
+        .description('concatenate some data')
+        .action(function(cmd, args) {});
+    expect(cli._commands.print).to.be.an
       .instanceof(Command);
-    expect(cli._commands.rm).to.be.an
+    expect(cli._commands.print.action).to.be.a('function');
+    expect(cli._commands.cat).to.be.an
       .instanceof(Command);
-    expect(cli._commands.add).to.be.an
+    expect(cli._commands.cat.action).to.be.a('function');
+    done();
+  });
+  it('should define command tree', function(done) {
+    var build = cli.command('build')
+      .description('compile some files')
+      .action(function(cmd, args) {});
+    var all = build.command('all')
+      .description('compile all formats')
+      .action(function(cmd, args) {});
+    var pdf = build.command('pdf')
+      .description('compile a pdf file')
+      .action(function(cmd, args) {});
+    var html =build.command('html')
+      .description('compile a html file')
+      .action(function(cmd, args) {});
+    expect(cli._commands.build).to.be.an
       .instanceof(Command);
+    expect(cli._commands.build.action).to.be.a('function');
+    expect(cli._commands.build._commands.all).to.be.an
+      .instanceof(Command);
+    expect(cli._commands.build._commands.all.action).to.be.a('function');
+    expect(cli._commands.build._commands.pdf).to.be.an
+      .instanceof(Command);
+    expect(cli._commands.build._commands.pdf.action).to.be.a('function');
+    expect(cli._commands.build._commands.html).to.be.an
+      .instanceof(Command);
+    expect(cli._commands.build._commands.html.action).to.be.a('function');
     done();
   });
 })
