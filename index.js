@@ -139,8 +139,12 @@ Command.prototype.command = function(name, description, options) {
  *  Define an option argument.
  */
 Command.prototype.option = function(name, description, options) {
-  var opt = (name instanceof Option) ? name
-    : new Option(name, description, options);
+  var clazz = Option;
+  if(typeof name == 'string' && !/[<\[]/.test(name)) {
+    clazz = Flag;
+  }
+  var opt = (name instanceof clazz) ? name
+    : new clazz(name, description, options);
   this._arguments[opt.key] = opt;
   return this;
 }
