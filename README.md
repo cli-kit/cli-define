@@ -37,13 +37,15 @@ cli.command('install')
 
 Initialize the program.
 
-* `package`: Path to the module `package.json` used to extract default program version and description information.
+* `package`: Path to the module `package.json` used to extract default program version and description.
 * `name`: Specific name for the program, overrides `package.json`.
 * `description`: Specific description for the program, overrides `package.json`.
 
 Returns a `Program` instance.
 
-### Program
+### Program(package, [name], [description])
+
+The root of the definition hierarchy, `Program` extends `Command`.
 
 #### help([name], [description], [action])
 
