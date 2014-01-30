@@ -144,7 +144,8 @@ cli.option('--port [n]', 'port', 8080)                    // => Optional option 
 cli.option('--port <n>', 'port', parseInt)                // => Required option w/coercion
 cli.option('--port [n]', 'port', 8080, parseInt)          // => Optional option w/default+coercion
 cli.option('--port [n]', 'port', parseInt, 8080)          // => Optional option w/coercion+default
-cli.option('--port [n]', 'port', parseInt, function(){})  // => Required option w/coercion+validate
+cli.option('--port <n>', 'port', parseInt, function(){})  // => Required option w/coercion+validate
+cli.option('--port [n]', 'port', parseInt, function(){})  // => Optional option w/coercion+validate
 ```
 
 Adds an option to the command.
