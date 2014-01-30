@@ -46,6 +46,18 @@ Returns a `Program` instance.
 
 The root of the definition hierarchy, `Program` extends `Command`.
 
+#### _description
+
+The program description.
+
+#### _name
+
+The program name.
+
+#### _version
+
+The program version.
+
 #### help([name], [description], [action])
 
 ```
@@ -95,6 +107,14 @@ Returns the program for chaining.
 ### Command(name, [description], [options])
 
 Represents a command option.
+
+#### _commands
+
+Map of command options.
+
+#### _arguments
+
+Map of non-command options.
 
 #### command(name, [description], [options])
 
@@ -157,17 +177,67 @@ Represents an option that does not expect a value and is treated as a `boolean`,
 
 Abstract super class for all argument definition classes.
 
-#### action(fn)
+You may specify any of the properties below on the options object and they will be transferred to the instance.
 
-Sets a callback function for the argument.
+Note that you may also specify `action` and `description` properties on the options and the appropriate mutator methods will be called.
+
+#### action([fn])
+
+Get or set a callback function for the argument, this is typically used by `Command` arguments but can also be specified for other arguments.
 
 * `fn`: The callback function.
 
-#### description(description)
+#### converter
 
-Sets the description for the argument.
+A function used to coerce the argument value.
+
+#### description([description])
+
+Get or set the description for the argument.
 
 * `description`: The argument description.
+
+#### extra
+
+A string representing the remainder of an argument name, given a `name` of `-i --integer <n>`, `extra` will equal `<n>`.
+
+#### key
+
+The `key` for the argument automatically generated based on the argument `name`.
+
+```
+-v            // => v
+-v --verbose  // => verbose
+-p --port <n> // => port
+```
+
+#### id
+
+A field reserved for user data, currently unused but could be used for i18n message lookup.
+
+#### name
+
+The string name of the argument.
+
+```
+-v
+-v --verbose
+-v, --verbose
+-v | --verbose
+-p --port <n>
+```
+
+#### required
+
+A `boolean` indicating that the argument is required.
+
+#### validator
+
+A function used to validate the argument value.
+
+#### value
+
+A value assigned to the instance after argument parsing, this may be used to set the default value for an argument.
 
 ## License
 

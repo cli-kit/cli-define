@@ -12,6 +12,7 @@ var properties = [
   'converter',
   'extra'
 ];
+
 var methods = ['description', 'action'];
 
 /**
