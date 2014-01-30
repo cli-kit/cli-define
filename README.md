@@ -17,12 +17,25 @@ npm test
 ## API
 
 ```
-var cli = require('cli-define')('./package.json');
+var path = require('path');
+var cli = require('cli-define')(path.join(__dirname, 'package.json'));
+cli
+  .option('-f --file', 'file to install')
+  .flag('-v --verbose', 'print more information')
+  .version()
+  .help()
+cli.command('install')
+  .description('install a package')
+  .action(function(cmd, args) {
+    console.dir(this);
+  })
 ```
 
 ### Module
 
 #### .(package, [name], [description])
+
+Initialize the program.
 
 * `package`: Path to the module `package.json` used to extract default program version and description information.
 * `name`: Specific name for the program, overrides `package.json`.
@@ -78,7 +91,7 @@ Adds a version flag to the program, scope for the callback is the program instan
 
 Returns the program for chaining.
 
-### Command
+### Command(name, [description], [options])
 
 Represents a command option.
 
@@ -131,17 +144,29 @@ Adds a flag option to the command.
 
 Returns the parent `Command` for chaining.
 
-### Option
+### Option(name, [description], [options])
 
 Represents an option that expects a value, shares all the functionality of the `Argument` super class.
 
-### Flag
+### Flag(name, [description], [options])
 
 Represents an option that does not expect a value and is treated as a `boolean`, shares all the functionality of the `Argument` super class.
 
-### Argument
+### Argument(name, [description], [options])
 
 Abstract super class for all argument definition classes.
+
+#### action(fn)
+
+Sets a callback function for the argument.
+
+* `fn`: The callback function.
+
+#### description(description)
+
+Sets the description for the argument.
+
+* `description`: The argument description.
 
 ## License
 
