@@ -16,7 +16,7 @@ npm test
 
 ## API
 
-```
+```javascript
 var path = require('path');
 var cli = require('cli-define')(path.join(__dirname, 'package.json'));
 cli
@@ -60,7 +60,7 @@ The program version.
 
 #### help([name], [description], [action])
 
-```
+```javascript
 cli.help()
 cli.help('--help')
 cli.help(function(help){help.call(this)})
@@ -76,7 +76,7 @@ Returns the program for chaining.
 
 #### usage(usage)
 
-```
+```javascript
 cli.usage('[command] [options] <files...>')
 ```
 
@@ -88,7 +88,7 @@ Returns the program for chaining.
 
 #### version([version], [name], [description], [action])
 
-```
+```javascript
 cli.version()
 cli.version('1.0.0')
 cli.version('1.0.0', '--version')
@@ -118,7 +118,7 @@ Map of non-command options.
 
 #### command(name, [description], [options])
 
-```
+```javascript
 cli.command('install', 'install a package')
 cli.command('install')
   .description('install a package')
@@ -135,7 +135,7 @@ If `description` is specified returns the `Program` otherwise the `Command` inst
 
 #### option(name, [description], [options])
 
-```
+```javascript
 cli.option('-d', 'debug')                                 // => Flag
 cli.option('--debug', 'debug')                            // => Flag
 cli.option('-v --verbose', 'verbose')                     // => Flag
@@ -158,7 +158,7 @@ Returns the parent `Command` for chaining.
 
 #### flag(name, [description], [options])
 
-```
+```javascript
 cli.flag('-v --verbose', 'print more information')
 cli.flag('-v, --verbose', 'print more information')
 cli.flag('-v | --verbose', 'print more information')
@@ -212,7 +212,7 @@ A string representing the remainder of an argument name, given a `name` of `-i -
 
 The `key` for the argument automatically generated based on the argument `name`.
 
-```
+```javascript
 -v            // => v
 -v --verbose  // => verbose
 -p --port <n> // => port
@@ -226,7 +226,7 @@ A field reserved for user data, currently unused but could be used for i18n mess
 
 The string name of the argument.
 
-```
+```javascript
 -v
 -v --verbose
 -v, --verbose
