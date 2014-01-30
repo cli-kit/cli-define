@@ -1,6 +1,6 @@
 # Define
 
-Defines the arguments for a command line interface.
+Chainable argument builder for a command line interface.
 
 ## Install
 
