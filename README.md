@@ -25,9 +25,10 @@ var cli = require('cli-define')('./package.json');
 #### .(package, [name], [description])
 
 * `package`: Path to the module `package.json` used to extract default program version and description information.
-* `name`: Specific name for the program.
-* `description`: Specific description for the program.
+* `name`: Specific name for the program, overrides `package.json`.
+* `description`: Specific description for the program, overrides `package.json`.
 
+Returns a `Program` instance.
 
 ### Program
 
@@ -53,7 +54,7 @@ Returns the program for chaining.
 program.usage('[command] [options] <files...>')
 ```
 
-Sets a custom program usage string override the default behaviour. 
+Sets a custom program usage string, overrides the default behaviour. 
 
 * `usage`: The usage string.
 
@@ -79,9 +80,68 @@ Returns the program for chaining.
 
 ### Command
 
+Represents a command option.
+
+#### command(name, [description], [options])
+
+```
+program.command('install', 'install a package')
+program.command('install')
+  .description('install a package')
+  .action(function(cmd, args){})
+```
+
+Adds a command option.
+
+* `name`: The name of the command.
+* `description`: The command description.
+* `options`: The argument options.
+
+If `description` is specified returns the `Program` otherwise the `Command` instance.
+
+#### option(name, [description], [options])
+
+```
+program.option('-f --file', 'file to install')
+program.option('-f, --file', 'file to install')
+program.option('-f | --file', 'file to install')
+```
+
+Adds an option to the command.
+
+* `name`: The name of the option.
+* `description`: The option description.
+* `options`: The argument options.
+
+Returns the parent `Command` for chaining.
+
+#### flag(name, [description], [options])
+
+```
+program.flag('-v --verbose', 'print more information')
+program.flag('-v, --verbose', 'print more information')
+program.flag('-v | --verbose', 'print more information')
+```
+
+Adds a flag option to the command.
+
+* `name`: The name of the flag.
+* `description`: The flag description.
+* `options`: The argument options.
+
+Returns the parent `Command` for chaining.
+
 ### Option
 
+Represents an option that expects a value, shares all the functionality of the `Argument` super class.
+
 ### Flag
+
+Represents an option that does not expect a value and is treated as a `boolean`, shares all the functionality of the `Argument` super class.
+
+### Argument
+
+Abstract super class for all argument definition classes.
 
 ## License
 
