@@ -39,7 +39,6 @@ describe('cli-define:', function() {
       .to.eql('<n>');
     done();
   });
-
   //.option('-f, --float <n>', 'a float argument', parseFloat)
   //.option('-r, --range <a>..<b>', 'a range', range)
   //.option('-l, --list <items>', 'a list', list)

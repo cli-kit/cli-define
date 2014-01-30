@@ -37,6 +37,8 @@ var Argument = function(name, description, options) {
     this.initialize(options);
   }else if(typeof options == 'function'){
     this._converter = options;
+  }else {
+    this._value = options;
   }
   this._names = this._name.split(/[ ,|]+/);
   if(this._names.length > 2) {
