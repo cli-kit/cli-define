@@ -40,4 +40,22 @@ describe('cli-define:', function() {
     expect(cli._arguments.file.value).to.eql(false);
     done();
   });
+  it('should define default value/converter', function(done) {
+    cli.option('-p, --port <n>', 'a port number', 8080, parseInt)
+    expect(cli._arguments.port).to.be.an
+      .instanceof(Option);
+    expect(cli._arguments.port.value).to.eql(8080);
+    expect(cli._arguments.port.converter).to.be.a('function')
+      .that.equals(parseInt);
+    done();
+  });
+  it('should define converter/default value', function(done) {
+    cli.option('-p, --port <n>', 'a port number', parseInt, 8080)
+    expect(cli._arguments.port).to.be.an
+      .instanceof(Option);
+    expect(cli._arguments.port.value).to.eql(8080);
+    expect(cli._arguments.port.converter).to.be.a('function')
+      .that.equals(parseInt);
+    done();
+  });
 })

@@ -29,7 +29,7 @@ var Argument = function(name, description, options) {
   this._key = '';
   this._id = '';
   this._optional = true;
-  this._value = '';
+  this._value;
   this._validator = null;
   this._converter = null;
   this._action = null;
@@ -37,8 +37,14 @@ var Argument = function(name, description, options) {
     this.initialize(options);
   }else if(typeof options == 'function'){
     this._converter = options;
+    if(arguments.length > 3 && this._value === undefined) {
+      this._value = arguments[3];
+    }
   }else {
     this._value = options;
+    if(arguments.length > 3 && typeof(arguments[3]) == 'function') {
+      this._converter = arguments[3];
+    }
   }
   this._names = this._name.split(/[ ,|]+/);
   if(this._names.length > 2) {
@@ -140,13 +146,13 @@ Command.prototype.command = function(name, description, options) {
 /**
  *  Define an option argument.
  */
-Command.prototype.option = function(name, description, options) {
+Command.prototype.option = function(name, description, options, coerce, value) {
   var clazz = Option;
   if(typeof name == 'string' && !/[<\[]/.test(name)) {
     clazz = Flag;
   }
   var opt = (name instanceof clazz) ? name
-    : new clazz(name, description, options);
+    : new clazz(name, description, options, coerce, value);
   this._arguments[opt.key] = opt;
   return this;
 }
@@ -154,9 +160,9 @@ Command.prototype.option = function(name, description, options) {
 /**
  *  Define a flag option.
  */
-Command.prototype.flag = function(name, description, options) {
+Command.prototype.flag = function(name, description, options, coerce, value) {
   var opt = (name instanceof Flag) ? name
-    : new Flag(name, description, options);
+    : new Flag(name, description, options, coerce, value);
   this._arguments[opt.key] = opt;
   return this;
 }
