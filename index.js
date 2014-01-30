@@ -4,7 +4,6 @@ var util = require('util');
 var camelcase = require('cli-util').camelcase;
 var properties = [
   'name',
-  //'description',
   'key',
   'id',
   'required',
@@ -12,9 +11,7 @@ var properties = [
   'validator',
   'converter',
   'extra'
-  //'action'
 ];
-
 var methods = ['description', 'action'];
 
 /**
@@ -91,16 +88,12 @@ properties.forEach(function(prop) {
 
 methods.forEach(function(prop) {
   Argument.prototype[prop] = function(value) {
-    //console.dir('mutator called: ' + value);
     var key = '_' + prop;
     if(!value) return this[key];
-    //console.dir('mutator called: ' + key);
     this[key] = value;
-    //console.dir('mutator called: ' + this[key]);
     if(value) return this;
   }
 });
-
 
 /**
  *  Represents an option argument.
@@ -257,9 +250,7 @@ function create(package, name, description) {
 }
 
 module.exports = create;
-module.exports.cli = root;
 module.exports.Program = Program;
 module.exports.Command = Command;
 module.exports.Option = Option;
 module.exports.Flag = Flag;
-
