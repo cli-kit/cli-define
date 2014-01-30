@@ -48,6 +48,9 @@ var Argument = function(name, description, options) {
   this._key = this.getKey();
 }
 
+/**
+ *  Retrieve the key for the option.
+ */
 Argument.prototype.getKey = function() {
   var k, i, v;
   for(i = 0;i < this._names.length;i++) {
@@ -69,6 +72,8 @@ Argument.prototype.initialize = function(options) {
   for(var z in options) {
     this[z] = options[z];
   }
+  if(options.description) this.description(options.description);
+  if(options.action) this.action(options.action);
 }
 
 Argument.prototype.__defineGetter__('names', function() {
@@ -253,6 +258,7 @@ function create(package, name, description) {
 
 module.exports = create;
 module.exports.cli = root;
+module.exports.Program = Program;
 module.exports.Command = Command;
 module.exports.Option = Option;
 module.exports.Flag = Flag;
