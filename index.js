@@ -6,7 +6,7 @@ var properties = [
   'name',
   'key',
   'id',
-  'required',
+  'optional',
   'value',
   'validator',
   'converter',
@@ -28,7 +28,7 @@ var Argument = function(name, description, options) {
   this._description = description || '';
   this._key = '';
   this._id = '';
-  this._required = false;
+  this._optional = true;
   this._value = '';
   this._validator = null;
   this._converter = null;

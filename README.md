@@ -227,9 +227,9 @@ The string name of the argument.
 -p --port <n>
 ```
 
-#### required
+#### optional
 
-A `boolean` indicating that the argument is required.
+A `boolean` indicating that the argument is optional.
 
 #### validator
 
