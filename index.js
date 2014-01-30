@@ -51,6 +51,9 @@ var Argument = function(name, description, options) {
     this._extra = this._names.slice(2).join(' ');
     this._names = this._names.slice(0, 2);
   }
+  if(/</.test(this._name)) {
+    this.optional = false;
+  }
   this._key = this.getKey();
 }
 
@@ -158,7 +161,7 @@ Command.prototype.option = function(name, description, options, coerce, value) {
 }
 
 /**
- *  Define a flag option.
+ *  Define a flag argument.
  */
 Command.prototype.flag = function(name, description, options, coerce, value) {
   var opt = (name instanceof Flag) ? name
