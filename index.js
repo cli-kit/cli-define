@@ -85,8 +85,8 @@ Argument.prototype.initialize = function(options) {
   for(var z in options) {
     this[z] = options[z];
   }
-  if(options.description) this.description(options.description);
-  if(options.action) this.action(options.action);
+  if(options.description) this._description = options.description;
+  if(options.action) this._action = options.action;
 }
 
 Argument.prototype.__defineGetter__('names', function() {
@@ -126,12 +126,6 @@ util.inherits(Option, Argument);
 var Flag = function() {
   Argument.apply(this, arguments);
   this._value = false;
-  //var re = /^no/;
-  //if(re.test(this._key)) {
-    //this._value = true;
-    //this._key = this._key.replace(re, '');
-    //this._key = this._key.charAt(0).toLowerCase() + this._key.slice(1);
-  //}
 }
 
 util.inherits(Flag, Argument);
