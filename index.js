@@ -1,3 +1,4 @@
+var events = require('events');
 var fs = require('fs');
 var path = require('path'), basename = path.basename;
 var util = require('util');
@@ -60,6 +61,8 @@ var Argument = function(name, description, options) {
   }
   this._key = this.getKey();
 }
+
+util.inherits(Argument, events.EventEmitter);
 
 /**
  *  Retrieve the key for the option.
