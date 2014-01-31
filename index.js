@@ -241,11 +241,6 @@ Program.prototype.help = function(name, description, action) {
   return this;
 }
 
-var root = new Program(basename(process.argv[1]));
-properties.forEach(function(prop) {
-  if(prop != 'name' && prop != 'description') delete root['_' + prop];
-})
-
 /**
  *  Initialize the root command from a package.json
  *  project descripton.
@@ -255,6 +250,10 @@ properties.forEach(function(prop) {
  *  @param description A specific description for the root command (optional).
  */
 function create(package, name, description) {
+  var root = new Program(basename(process.argv[1]));
+  properties.forEach(function(prop) {
+    if(prop != 'name' && prop != 'description') delete root['_' + prop];
+  })
   if(fs.existsSync(package)) {
     try {
       var pkg = root._package = require(package);
