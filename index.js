@@ -262,7 +262,8 @@ function create(package, name, description) {
       if(pkg.author) root._author = pkg.author;
       if(pkg.description) root._description = pkg.description;
     }catch(e) {
-      console.error('package parse error %s (malformed json)', package);
+      throw new Error(util.format(
+        'package parse error %s (malformed json)', package));
     }
   }
   if(name) root.name = name;
