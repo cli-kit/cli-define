@@ -33,7 +33,7 @@ var Argument = function(name, description, options) {
   this._validator = null;
   this._converter = null;
   this._action = null;
-  if(typeof options == 'object' && !Array.isArray(options)) {
+  if(options && (typeof options == 'object') && !Array.isArray(options)) {
     this.initialize(options);
   }else if(typeof options == 'function'){
     this._converter = options;
@@ -83,7 +83,7 @@ Argument.prototype.getKey = function() {
  */
 Argument.prototype.initialize = function(options) {
   for(var z in options) {
-    this[z] = options[z];
+    if(~properties.indexOf(z)) this[z] = options[z];
   }
   if(options.description) this._description = options.description;
   if(options.action) this._action = options.action;
@@ -105,9 +105,9 @@ properties.forEach(function(prop) {
 methods.forEach(function(prop) {
   Argument.prototype[prop] = function(value) {
     var key = '_' + prop;
-    if(!value) return this[key];
+    if(value === undefined) return this[key];
     this[key] = value;
-    if(value) return this;
+    return this;
   }
 });
 
