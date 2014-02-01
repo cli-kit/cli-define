@@ -1,8 +1,6 @@
 var path = require('path');
 var expect = require('chai').expect;
 var cli = require('../..')(path.join(__dirname, '..', '..', 'package.json'));
-var Flag = require('../..').Flag;
-var Option = require('../..').Option;
 
 describe('cli-define:', function() {
   it('should define optional value', function(done) {

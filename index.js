@@ -8,6 +8,7 @@ var properties = [
   'key',
   'id',
   'optional',
+  'multiple',
   'value',
   'validator',
   'converter',
@@ -15,6 +16,8 @@ var properties = [
 ];
 
 var methods = ['description', 'action'];
+var required = /^</;
+var multiple = /\.\.\./;
 
 /**
  *  Abstract super class.
@@ -30,10 +33,12 @@ var Argument = function(name, description, options) {
   this._key = '';
   this._id = '';
   this._optional = true;
+  this._multiple = false;
   this._value;
   this._validator = null;
   this._converter = null;
   this._action = null;
+  this._extra = '';
   if(options && (typeof options == 'object') && !Array.isArray(options)) {
     this.initialize(options);
   }else if(typeof options == 'function'){
@@ -53,11 +58,13 @@ var Argument = function(name, description, options) {
   }
   this._names = this._name.split(/[ ,|]+/);
   if(this._names.length > 2) {
-    this._extra = this._names.slice(2).join(' ');
-    this._names = this._names.slice(0, 2);
+    this._extra = this._names.pop();
   }
-  if(/</.test(this._name)) {
-    this.optional = false;
+  if(required.test(this._extra)) {
+    this._optional = false;
+  }
+  if(multiple.test(this._extra)) {
+    this._multiple = true;
   }
   this._key = this.getKey();
 }

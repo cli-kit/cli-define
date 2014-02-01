@@ -222,6 +222,10 @@ The `key` for the argument automatically generated based on the argument `name`.
 
 A field reserved for user data, currently unused but could be used for i18n message lookup.
 
+#### multiple
+
+A `boolean` indicating that the argument may be repated, default is `false`.
+
 #### name
 
 The string name of the argument.
@@ -236,7 +240,7 @@ The string name of the argument.
 
 #### optional
 
-A `boolean` indicating that the argument is optional.
+A `boolean` indicating that the argument is optional, default is `true`.
 
 #### validator
 
