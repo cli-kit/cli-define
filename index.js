@@ -41,14 +41,16 @@ var Argument = function(name, description, options) {
     this._converter = JSON;
   }else if(options && (typeof options == 'object') && !Array.isArray(options)) {
     this.initialize(options);
-  }else if(typeof options == 'function'){
+  }else if((typeof options == 'function') || this.isFunctionArray(options)){
     this._converter = options;
     if(arguments.length > 3 && this._value === undefined) {
       this._value = arguments[3];
     }
   }else {
     this._value = options;
-    if(arguments.length > 3 && typeof(arguments[3]) == 'function') {
+    if(arguments.length > 3
+      && (typeof(arguments[3]) == 'function'
+      || this.isFunctionArray(options))) {
       this._converter = arguments[3];
     }
   }
@@ -68,6 +70,22 @@ var Argument = function(name, description, options) {
 }
 
 util.inherits(Argument, events.EventEmitter);
+
+/**
+ *  Determines whether an array consists solely of functions
+ *  allowing for the special case JSON.
+ *
+ *  @param arr The array candidate.
+ */
+Argument.prototype.isFunctionArray = function(arr) {
+  if(!Array.isArray(arr)) return false;
+  var i, item;
+  for(i = 0;i < arr.length;i++) {
+    item = arr[i];
+    if(item !== JSON && !(typeof item == 'function')) return false;
+  }
+  return true;
+}
 
 /**
  *  Retrieve the key for the option.
