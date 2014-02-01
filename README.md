@@ -20,7 +20,7 @@ npm test
 var path = require('path');
 var cli = require('cli-define')(path.join(__dirname, 'package.json'));
 cli
-  .option('-f --file <file...>', 'files to install')
+  .option('-f --file <file...>', 'files to copy')
   .option('-v --verbose', 'print more information')
   .version()
   .help()
@@ -37,6 +37,7 @@ The recommended way to define options is to use the self-documenting `name` conv
 
 ```javascript
 -v                            // => flag
+--verbose                     // => flag
 -v --verbose                  // => flag
 -v, --verbose                 // => flag
 -v | --verbose                // => flag
