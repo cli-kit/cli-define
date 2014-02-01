@@ -20,14 +20,30 @@ npm test
 var path = require('path');
 var cli = require('cli-define')(path.join(__dirname, 'package.json'));
 cli
-  .option('-f --file', 'file to install')
-  .flag('-v --verbose', 'print more information')
+  .option('-f --file <file...>', 'files to install')
+  .option('-v --verbose', 'print more information')
   .version()
   .help()
-cli.command('install')
-  .description('install a package')
-  .action(function(cmd, args) {})
+cli.command('cp')
+  .description('copy files')
+  .action(function(cmd, options, raw) {
+    // execute copy logic here, scope is the program instance
+    console.dir(this.file);
+  })
 console.dir(cli);
+```
+
+The recommended way to define options is to use the self-documenting `name` convention:
+
+```javascript
+-v                            // => flag
+-v --verbose                  // => flag
+-v, --verbose                 // => flag
+-v | --verbose                // => flag
+--option [value]              // => option (optional) 
+--option <value>              // => option (required)
+--option [value...]           // => option (optional, repeatable)
+--option <value...>           // => option (required, repeatable)
 ```
 
 ### Module
@@ -162,7 +178,7 @@ cli.flag('-v, --verbose', 'print more information')
 cli.flag('-v | --verbose', 'print more information')
 ```
 
-Adds a flag option to the command.
+Explicityl adds a flag option to the command.
 
 * `name`: The name of the flag.
 * `description`: The flag description.
