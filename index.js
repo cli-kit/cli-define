@@ -56,9 +56,11 @@ var Argument = function(name, description, options) {
       this._converter = arguments[3];
     }
   }
-  this._names = this._name.split(/[ ,|]+/);
+  var delimiter = /[ ,|]+/;
+  this._names = this._name.split(delimiter);
   if(this._names.length > 2) {
-    this._extra = this._names.pop();
+    this._extra = this._names.slice(2).join(' ');
+    this._names = this._names.slice(0,2);
   }
   if(required.test(this._extra)) {
     this._optional = false;
