@@ -17,4 +17,10 @@ describe('cli-define:', function() {
       .to.be.a('function').that.equals(parseFloat);
     done();
   });
+  it('should define option with converter (JSON)', function(done) {
+    cli.option('-j, --json <j>', 'a json argument', JSON)
+    expect(cli._arguments.json.converter)
+      .to.be.an('object').that.equals(JSON);
+    done();
+  });
 })

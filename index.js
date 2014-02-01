@@ -39,7 +39,9 @@ var Argument = function(name, description, options) {
   this._converter = null;
   this._action = null;
   this._extra = '';
-  if(options && (typeof options == 'object') && !Array.isArray(options)) {
+  if(options === JSON) {
+    this._converter = JSON;
+  }else if(options && (typeof options == 'object') && !Array.isArray(options)) {
     this.initialize(options);
   }else if(typeof options == 'function'){
     this._converter = options;
