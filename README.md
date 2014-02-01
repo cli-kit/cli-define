@@ -242,10 +242,6 @@ The string name of the argument.
 
 A `boolean` indicating that the argument is optional, default is `true`.
 
-#### validator
-
-A function used to validate the argument value.
-
 #### value
 
 A value assigned to the instance after argument parsing, this may be used to set the default value for an argument.

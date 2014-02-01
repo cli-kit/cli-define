@@ -10,7 +10,6 @@ var properties = [
   'optional',
   'multiple',
   'value',
-  'validator',
   'converter',
   'extra'
 ];
@@ -35,7 +34,6 @@ var Argument = function(name, description, options) {
   this._optional = true;
   this._multiple = false;
   this._value;
-  this._validator = null;
   this._converter = null;
   this._action = null;
   this._extra = '';
@@ -46,11 +44,7 @@ var Argument = function(name, description, options) {
   }else if(typeof options == 'function'){
     this._converter = options;
     if(arguments.length > 3 && this._value === undefined) {
-      if(typeof(arguments[3]) == 'function') {
-        this._validator = arguments[3];
-      }else{
-        this._value = arguments[3];
-      }
+      this._value = arguments[3];
     }
   }else {
     this._value = options;
