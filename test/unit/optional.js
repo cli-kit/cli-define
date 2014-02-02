@@ -13,4 +13,9 @@ describe('cli-define:', function() {
     expect(cli._arguments.type.optional).to.eql(false);
     done();
   });
+  it('should define required value (single name)', function(done) {
+    cli.option('--type <type>', 'a mime type', 'application/json')
+    expect(cli._arguments.type.optional).to.eql(false);
+    done();
+  });
 })

@@ -56,9 +56,12 @@ var Argument = function(name, description, options) {
   }
   var delimiter = /[ ,|]+/;
   this._names = this._name.split(delimiter);
-  if(this._names.length > 2) {
-    this._extra = this._names.slice(2).join(' ');
-    this._names = this._names.slice(0,2);
+  for(var i = 0;i < this._names.length;i++) {
+    if(/^(\[|<)/.test(this._names[i])) {
+      this._extra = this._names.slice(i).join(' ');
+      this._names = this._names.slice(0, i);
+      break;
+    }
   }
   if(required.test(this._extra)) {
     this._optional = false;
