@@ -166,6 +166,15 @@ var Command = function() {
   Argument.apply(this, arguments);
   this._commands = {};
   this._arguments = {};
+  this.args = null;
+  delete this._names;
+  delete this.names;
+  delete this._extra;
+  delete this.extra;
+  delete this._optional;
+  delete this.optional;
+  delete this._value;
+  delete this.value;
 }
 
 util.inherits(Command, Argument);
@@ -212,8 +221,6 @@ var Program = function() {
   this._version = '0.0.1';
   this._author = null;
   this._usage = null;
-  delete this._names;
-  delete this._extra;
 }
 
 util.inherits(Program, Command);
