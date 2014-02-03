@@ -171,7 +171,7 @@ var Command = function(name, description, options) {
   this._key = this.name;
 }
 
-util.inherits(Command, Object);
+util.inherits(Command, events.EventEmitter);
 
 commands.forEach(function(prop) {
   Command.prototype.__defineGetter__(prop, function() {
