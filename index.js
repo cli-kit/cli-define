@@ -3,20 +3,31 @@ var fs = require('fs');
 var path = require('path'), basename = path.basename;
 var util = require('util');
 var camelcase = require('cli-util').camelcase;
-var properties = [
+var commands = [
   'name',
   'key',
-  'id',
+  'id'
+]
+
+var properties = commands.concat([
   'optional',
   'multiple',
   'value',
   'converter',
   'extra'
-];
+]);
 
 var methods = ['description', 'action'];
 var required = /^</;
 var multiple = /\.\.\./;
+
+function initialize(options, properties) {
+  for(var z in options) {
+    if(~properties.indexOf(z)) this[z] = options[z];
+  }
+  if(options.description) this._description = options.description;
+  if(options.action) this._action = options.action;
+}
 
 /**
  *  Abstract super class.
@@ -40,7 +51,7 @@ var Argument = function(name, description, options) {
   if(options === JSON) {
     this._converter = JSON;
   }else if(options && (typeof options == 'object') && !Array.isArray(options)) {
-    this.initialize(options);
+    initialize.call(this, options, properties);
   }else if((typeof options == 'function') || this.isFunctionArray(options)){
     this._converter = options;
     if(arguments.length > 3 && this._value === undefined) {
@@ -105,17 +116,8 @@ Argument.prototype.getKey = function() {
   return k;
 }
 
-/**
- *  Initialize instance properties.
- *
- *  @param options The argument options.
- */
-Argument.prototype.initialize = function(options) {
-  for(var z in options) {
-    if(~properties.indexOf(z)) this[z] = options[z];
-  }
-  if(options.description) this._description = options.description;
-  if(options.action) this._action = options.action;
+Argument.prototype.action = function() {
+  return this._action;
 }
 
 Argument.prototype.__defineGetter__('names', function() {
@@ -129,15 +131,6 @@ properties.forEach(function(prop) {
   Argument.prototype.__defineSetter__(prop, function(value) {
     this['_' + prop] = value;
   });
-});
-
-methods.forEach(function(prop) {
-  Argument.prototype[prop] = function(value) {
-    var key = '_' + prop;
-    if(value === undefined) return this[key];
-    this[key] = value;
-    return this;
-  }
 });
 
 /**
@@ -162,22 +155,41 @@ util.inherits(Flag, Argument);
 /**
  *  Represents a command argument.
  */
-var Command = function() {
-  Argument.apply(this, arguments);
+var Command = function(name, description, options) {
+  if(typeof name == 'object') options = name;
   this._commands = {};
   this._arguments = {};
   this.args = null;
-  delete this._names;
-  delete this.names;
-  delete this._extra;
-  delete this.extra;
-  delete this._optional;
-  delete this.optional;
-  delete this._value;
-  delete this.value;
+  this._name = name || '';
+  this._description = description || '';
+  this._key = '';
+  this._id = '';
+  this._action = null;
+  if((typeof options == 'object')) {
+    initialize.call(this, options, commands);
+  }
+  this._key = this.name;
 }
 
-util.inherits(Command, Argument);
+util.inherits(Command, Object);
+
+commands.forEach(function(prop) {
+  Command.prototype.__defineGetter__(prop, function() {
+    return this['_' + prop];
+  });
+  Command.prototype.__defineSetter__(prop, function(value) {
+    this['_' + prop] = value;
+  });
+});
+
+methods.forEach(function(prop) {
+  Command.prototype[prop] = function(value) {
+    var key = '_' + prop;
+    if(value === undefined) return this[key];
+    this[key] = value;
+    return this;
+  }
+});
 
 /**
  *  Define a command argument.

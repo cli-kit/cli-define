@@ -1,6 +1,7 @@
 var path = require('path');
 var expect = require('chai').expect;
-var cli = require('../..')(path.join(__dirname, '..', '..', 'package.json'));
+var cli = require('../..')(
+  path.join(__dirname, '..', '..', 'package.json'));
 var Flag = require('../..').Flag;
 var Option = require('../..').Option;
 var Command = require('../..').Command;
