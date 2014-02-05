@@ -39,4 +39,11 @@ describe('cli-define:', function() {
       done();
     }
   );
+  it('should define converter on program', function(done) {
+    function converter(){};
+    var result = cli.converter(converter);
+    expect(result).to.equal(cli);
+    expect(cli.converter()).to.equal(converter);
+    done();
+  });
 })

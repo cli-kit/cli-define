@@ -27,6 +27,9 @@ var mutators = {
     extra: true,
     description: true,
     action: true
+  },
+  prg: {
+    converter: true
   }
 }
 
@@ -103,9 +106,9 @@ var Argument = function(name, description, options) {
 
   // event emitter
   define(this, '_emitter', new events.EventEmitter(), false);
-  define(this, '_events', null, true);
-  define(this, '_maxListeners', null, true);
-  define(this, 'domain', null, true);
+  define(this, '_events', undefined, true);
+  define(this, '_maxListeners', undefined, true);
+  define(this, 'domain', undefined, true);
 
   if(options === JSON) {
     this._converter = JSON;
@@ -230,9 +233,9 @@ var Command = function(name, description, options) {
 
   // event emitter
   define(this, '_emitter', new events.EventEmitter(), false);
-  define(this, '_events', null, true);
-  define(this, '_maxListeners', null, true);
-  define(this, 'domain', null, true);
+  define(this, '_events', undefined, true);
+  define(this, '_maxListeners', undefined, true);
+  define(this, 'domain', undefined, true);
 
   // public
   define(this, 'args', undefined, true);
@@ -305,11 +308,23 @@ define(Command.prototype, 'flag', flag, false);
 var Program = function() {
   Command.apply(this, arguments);
   define(this, '_version', '0.0.1', true);
-  define(this, '_author', null, true);
-  define(this, '_usage', null, true);
+  define(this, '_converter', undefined, true);
+  define(this, '_author', undefined, true);
+  define(this, '_usage', undefined, true);
 }
 
 util.inherits(Program, Command);
+
+keys = Object.keys(mutators.prg);
+keys.forEach(function(name) {
+  var write = function(value) {
+    var key = '_' + name;
+    if(value === undefined) return this[key];
+    this[key] = value;
+    return this;
+  }
+  define(Program.prototype, name, write, false);
+})
 
 /**
  *  Set the program usage string.

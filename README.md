@@ -62,13 +62,15 @@ Returns a `Program` instance.
 
 The root of the definition hierarchy, `Program` extends `Command`.
 
+#### converter([fn])
+
+A function used to coerce the value of unparsed arguments.
+
+* `fn`: A function used to coerce type or validate it's value.
+
 #### description([value])
 
 Get or set the program description.
-
-#### name([value])
-
-Get or set the program name.
 
 #### help([name], [description], [action])
 
@@ -85,6 +87,11 @@ Adds a help flag to the program, scope for the `action` callback is the program 
 * `action`: A callback to invoke when the help option is encountered, signature is `function(help)` where `help` is the default callback function if you wish to re-use it's functionality.
 
 Returns the program for chaining.
+
+
+#### name([value])
+
+Get or set the program name.
 
 #### usage(usage)
 
