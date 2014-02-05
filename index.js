@@ -317,6 +317,7 @@ util.inherits(Program, Command);
  *  @param usage The program usage string.
  */
 function usage(usage) {
+  if(!arguments.length && this._usage) return this._usage;
   this._usage = usage;
   return this;
 }
