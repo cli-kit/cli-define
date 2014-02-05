@@ -3,6 +3,7 @@ var fs = require('fs');
 var path = require('path'), basename = path.basename;
 var util = require('util');
 var camelcase = require('cli-util').camelcase;
+
 var commands = [
   'name',
   'key',
@@ -30,6 +31,18 @@ function initialize(options, properties) {
   if(options.action) this._action = options.action;
 }
 
+function define(obj, name, value, writable) {
+  writable = writable || false;
+  Object.defineProperty(obj, name,
+    {
+      enumerable: false,
+      configurable: false,
+      writable: writable,
+      value: value
+    }
+  );
+}
+
 /**
  *  Abstract super class.
  *
@@ -39,16 +52,30 @@ function initialize(options, properties) {
  */
 var Argument = function(name, description, options) {
   if(typeof name == 'object') options = name;
-  this._name = name || '';
-  this._description = description || '';
-  this._key = '';
-  this._id = '';
-  this._optional = true;
-  this._multiple = false;
-  this._value;
-  this._converter = null;
-  this._action = null;
-  this._extra = '';
+  define(this, '_name', name || '', true);
+  define(this, '_description', description || '', true);
+  define(this, '_key', '', true);
+  define(this, '_id', '', true);
+  define(this, '_optional', true, true);
+  define(this, '_multiple', false, true);
+  define(this, '_value', undefined, true);
+  define(this, '_converter', undefined, true);
+  define(this, '_action', undefined, true);
+  define(this, '_extra', undefined, true);
+  define(this, '_names', undefined, true);
+
+  //this._name = name || '';
+  //this._description = description || '';
+  //this._key = '';
+  //this._id = '';
+  //this._optional = true;
+  //this._multiple = false;
+  //this._value;
+  //this._converter = null;
+  //this._action = null;
+  //this._extra = '';
+  //
+
   if(options === JSON) {
     this._converter = JSON;
   }else if(options && (typeof options == 'object') && !Array.isArray(options)) {
