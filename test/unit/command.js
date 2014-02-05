@@ -26,4 +26,19 @@ describe('cli-define:', function() {
     expect(cmd.names).to.eql(['install', 'i']);
     done();
   });
+
+  it('should not enumerate builtin properties and methods', function(done) {
+    cli
+      .command('install i', 'install packages')
+    var cmd = cli._commands.install;
+    expect(cmd).to.be.an
+      .instanceof(Command);
+    console.dir(Object.keys(cmd));
+    for(var z in cmd) {
+      console.log('cmd %s', z);
+    }
+    done();
+  });
+
+
 })

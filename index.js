@@ -189,7 +189,7 @@ var Command = function(name, description, options) {
   if((typeof options == 'object')) {
     initialize.call(this, options, commands);
   }
-  this._names = this.name.split(delimiter);
+  this._names = this._name.split(delimiter);
   this._key = this._names[0];
 }
 
@@ -220,17 +220,18 @@ methods.forEach(function(prop) {
 /**
  *  Define a command argument.
  */
-Command.prototype.command = function(name, description, options) {
+function command(name, description, options) {
   var opt = (name instanceof Command) ? name
     : new Command(name, description, options);
   this._commands[opt.key] = opt;
   return description ? this : opt;
 }
+define(Command.prototype, 'command', command, false);
 
 /**
  *  Define an option argument.
  */
-Command.prototype.option = function(name, description, options, coerce, value) {
+function option(name, description, options, coerce, value) {
   var clazz = Option;
   if(typeof name == 'string' && !/[<\[]/.test(name)) {
     clazz = Flag;
@@ -240,16 +241,18 @@ Command.prototype.option = function(name, description, options, coerce, value) {
   this._arguments[opt.key] = opt;
   return this;
 }
+define(Command.prototype, 'option', option, false);
 
 /**
- *  Define a flag argument.
+ *  Define a flag argument explicitly.
  */
-Command.prototype.flag = function(name, description, options, coerce, value) {
+function flag(name, description, options, coerce, value) {
   var opt = (name instanceof Flag) ? name
     : new Flag(name, description, options, coerce, value);
   this._arguments[opt.key] = opt;
   return this;
 }
+define(Command.prototype, 'flag', flag, false);
 
 /**
  *  Represents the program.
@@ -259,9 +262,6 @@ var Program = function() {
   define(this, '_version', '0.0.1', true);
   define(this, '_author', null, true);
   define(this, '_usage', null, true);
-  //this._version = '0.0.1';
-  //this._author = null;
-  //this._usage = null;
 }
 
 util.inherits(Program, Command);
@@ -269,12 +269,13 @@ util.inherits(Program, Command);
 /**
  *  Set the program usage string.
  *
- *  @param usage Program usage.
+ *  @param usage The program usage string.
  */
-Program.prototype.usage = function(usage) {
+function usage(usage) {
   this._usage = usage;
   return this;
 }
+define(Program.prototype, 'usage', usage, false);
 
 /**
  *  Adds a version flag to the program.
@@ -284,7 +285,7 @@ Program.prototype.usage = function(usage) {
  *  @param description The argument description.
  *  @param action A function to invoke.
  */
-Program.prototype.version = function(version, name, description, action) {
+function version(version, name, description, action) {
   if(typeof version == 'function') {
     action = version;
     version = null;
@@ -297,6 +298,7 @@ Program.prototype.version = function(version, name, description, action) {
   this.flag(flag);
   return this;
 }
+define(Program.prototype, 'version', version, false);
 
 /**
  *  Adds a help flag to the program.
@@ -305,7 +307,7 @@ Program.prototype.version = function(version, name, description, action) {
  *  @param description The argument description.
  *  @param action A function to invoke.
  */
-Program.prototype.help = function(name, description, action) {
+function help(name, description, action) {
   if(typeof name == 'function') {
     action = name;
     name = null;
@@ -317,6 +319,7 @@ Program.prototype.help = function(name, description, action) {
   this.flag(flag);
   return this;
 }
+define(Program.prototype, 'help', help, false);
 
 /**
  *  Initialize the root command from a package.json
