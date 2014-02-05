@@ -17,6 +17,7 @@ var properties = commands.concat([
   'extra'
 ]);
 
+var delimiter = /[ ,|]+/;
 var methods = ['description', 'action'];
 var required = /^</;
 var multiple = /\.\.\./;
@@ -65,7 +66,6 @@ var Argument = function(name, description, options) {
       this._converter = arguments[3];
     }
   }
-  var delimiter = /[ ,|]+/;
   this._names = this._name.split(delimiter);
   for(var i = 0;i < this._names.length;i++) {
     if(/^(\[|<)/.test(this._names[i])) {
@@ -168,10 +168,17 @@ var Command = function(name, description, options) {
   if((typeof options == 'object')) {
     initialize.call(this, options, commands);
   }
-  this._key = this.name;
+  this._names = this.name.split(delimiter);
+  this._key = this._names[0];
 }
 
 util.inherits(Command, events.EventEmitter);
+
+
+Command.prototype.__defineGetter__('names', function() {
+  return this._names;
+});
+
 
 commands.forEach(function(prop) {
   Command.prototype.__defineGetter__(prop, function() {

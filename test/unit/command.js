@@ -15,4 +15,15 @@ describe('cli-define:', function() {
     expect('value' in arg).to.eql(false);
     done();
   });
+  it('should define command names (aliases)', function(done) {
+    cli
+      .command('install i', 'install packages')
+    var cmd = cli._commands.install;
+    expect(cmd).to.be.an
+      .instanceof(Command);
+    expect(cmd.key).to.eql('install');
+    expect(cmd.name).to.eql('install i');
+    expect(cmd.names).to.eql(['install', 'i']);
+    done();
+  });
 })
