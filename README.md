@@ -30,7 +30,6 @@ cli.command('cp')
     // execute copy logic here, scope is the program instance
     console.dir(this.file);
   })
-console.dir(cli);
 ```
 
 The recommended way to define options is to use the self-documenting `name` convention:
@@ -63,17 +62,13 @@ Returns a `Program` instance.
 
 The root of the definition hierarchy, `Program` extends `Command`.
 
-#### _description
+#### description([value])
 
-The program description.
+Get or set the program description.
 
-#### _name
+#### name([value])
 
-The program name.
-
-#### _version
-
-The program version.
+Get or set the program name.
 
 #### help([name], [description], [action])
 
@@ -83,9 +78,9 @@ cli.help('--help')
 cli.help(function(help){help.call(this)})
 ```
 
-Adds a help flag to the program, scope for the callback is the program instance access to the program is available via `this`.
+Adds a help flag to the program, scope for the `action` callback is the program instance.
 
-* `name`: A specific name for the help option flags, default is `-h | --help`.
+* `name`: A specific name for the help flag, default is `-h | --help`.
 * `description`: A specific description for the option, overrides the default.
 * `action`: A callback to invoke when the help option is encountered, signature is `function(help)` where `help` is the default callback function if you wish to re-use it's functionality.
 
@@ -97,11 +92,11 @@ Returns the program for chaining.
 cli.usage('[command] [options] <files...>')
 ```
 
-Sets a custom program usage string, overrides the default behaviour. 
+Get or set a custom program usage string, overrides the default behaviour. 
 
 * `usage`: The usage string.
 
-Returns the program for chaining.
+Returns the program for chaining or the usage string if it has been set and zero arguments are passed.
 
 #### version([version], [name], [description], [action])
 
@@ -112,26 +107,32 @@ cli.version('1.0.0', '--version')
 cli.version(function(version){version.call(this)})
 ```
 
-Adds a version flag to the program, scope for the callback is the program instance access to the program is available via `this`, configured version number is available via `this._version`.
+Adds a version flag to the program, scope for the `action` callback is the program instance. Configured version number is available via after setting the flag option by invoking with zero arguments.
 
 * `version`: A specific version for the program, overrides any version extracted from `package.json`.
 * `name`: A specific name for the version option flags, default is `-V | --version`.
 * `description`: A specific description for the option, overrides the default.
 * `action`: A callback to invoke when the version option is encountered, signature is `function(version)` where `version` is the default callback function if you wish to re-use it's functionality.
 
-Returns the program for chaining.
+Returns the program for chaining or the version string if a version flag exists and zero arguments are passed.
 
 ### Command(name, [description], [options])
 
 Represents a command option.
 
-#### _commands
+#### action([fn])
 
-Map of command options.
+Get or set a callback function for the command.
 
-#### _arguments
+* `fn`: The callback function.
 
-Map of non-command options.
+#### arguments()
+
+Map of non-command options (read only).
+
+#### commands()
+
+Map of command options (read only).
 
 #### command(name, [description], [options])
 
@@ -149,6 +150,28 @@ Adds a command option.
 * `options`: The argument options.
 
 If `description` is specified returns the `Program` otherwise the `Command` instance.
+
+#### description([value])
+
+Get or set the description for the command.
+
+* `description`: The argument description.
+
+#### key([value])
+
+Get or set the `key` for the command automatically generated based on the command `name`.
+
+#### id([value])
+
+A field reserved for user data, currently unused but could be used for i18n message lookup.
+
+#### name([value])
+
+Get or set the full string name of the command.
+
+#### names()
+
+Array of name components (read only).
 
 #### option(name, [description], [options])
 
@@ -179,7 +202,7 @@ cli.flag('-v, --verbose', 'print more information')
 cli.flag('-v | --verbose', 'print more information')
 ```
 
-Explicityl adds a flag option to the command.
+Explicitly adds a flag option to the command.
 
 * `name`: The name of the flag.
 * `description`: The flag description.
@@ -199,9 +222,7 @@ Represents an option that does not expect a value and is treated as a `boolean`,
 
 Abstract super class for all argument definition classes.
 
-You may specify any of the properties below on the options object and they will be transferred to the instance.
-
-Note that you may also specify `action` and `description` properties on the options and the appropriate mutator methods will be called.
+You may specify any of the fields below on the options object and they will be transferred to the instance provided they are writable.
 
 #### action([fn])
 
@@ -209,23 +230,25 @@ Get or set a callback function for the argument, this is typically used by `Comm
 
 * `fn`: The callback function.
 
-#### converter
+#### converter([fn])
 
 A function used to coerce the argument value.
 
-#### description([description])
+* `fn`: A function used to coerce the arguments type or validate it's value.
+
+#### description([value])
 
 Get or set the description for the argument.
 
 * `description`: The argument description.
 
-#### extra
+#### extra([value])
 
 A string representing the remainder of an argument name, given a `name` of `-i --integer <n>`, `extra` will equal `<n>`.
 
-#### key
+#### key([value])
 
-The `key` for the argument automatically generated based on the argument `name`.
+Get or set the `key` for the argument automatically generated based on the argument `name`.
 
 ```javascript
 -v            // => v
@@ -233,17 +256,17 @@ The `key` for the argument automatically generated based on the argument `name`.
 -p --port <n> // => port
 ```
 
-#### id
+#### id([value])
 
 A field reserved for user data, currently unused but could be used for i18n message lookup.
 
-#### multiple
+#### multiple([value])
 
 A `boolean` indicating that the argument may be repated, default is `false`.
 
-#### name
+#### name([value])
 
-The string name of the argument.
+Get or set the full string name of the argument.
 
 ```javascript
 -v
@@ -253,13 +276,17 @@ The string name of the argument.
 -p --port <n>
 ```
 
-#### optional
+#### names()
+
+Array of name components, does not include the `extra()` value (read only).
+
+#### optional([value])
 
 A `boolean` indicating that the argument is optional, default is `true`.
 
-#### value
+#### value([value])
 
-A value assigned to the instance after argument parsing, this may be used to set the default value for an argument.
+Get or set the value assigned to the instance after argument parsing, this may be used to set the default value for an argument.
 
 ## License
 
