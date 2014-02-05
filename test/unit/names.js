@@ -7,7 +7,7 @@ var Option = require('../..').Option;
 describe('cli-define:', function() {
   it('should define names with whitespace', function(done) {
     cli.option('-v --verbose', 'print more information')
-    expect(cli._arguments.verbose.names)
+    expect(cli._arguments.verbose.names())
       .to.eql(['-v', '--verbose']);
     expect(cli._arguments.verbose).to.be.an
       .instanceof(Flag);
@@ -15,7 +15,7 @@ describe('cli-define:', function() {
   });
   it('should define names with comma', function(done) {
     cli.option('-v, --verbose', 'print more information')
-    expect(cli._arguments.verbose.names)
+    expect(cli._arguments.verbose.names())
       .to.eql(['-v', '--verbose']);
     expect(cli._arguments.verbose).to.be.an
       .instanceof(Flag);
@@ -23,7 +23,7 @@ describe('cli-define:', function() {
   });
   it('should define names with pipe', function(done) {
     cli.option('-v | --verbose', 'print more information')
-    expect(cli._arguments.verbose.names)
+    expect(cli._arguments.verbose.names())
       .to.eql(['-v', '--verbose']);
     expect(cli._arguments.verbose).to.be.an
       .instanceof(Flag);
@@ -33,9 +33,9 @@ describe('cli-define:', function() {
     cli.option('-f, --float <n>', 'a float argument')
     expect(cli._arguments.float).to.be.an
       .instanceof(Option);
-    expect(cli._arguments.float.names)
+    expect(cli._arguments.float.names())
       .to.eql(['-f', '--float']);
-    expect(cli._arguments.float.extra)
+    expect(cli._arguments.float.extra())
       .to.eql('<n>');
     done();
   });

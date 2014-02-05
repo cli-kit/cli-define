@@ -4,31 +4,41 @@ var path = require('path'), basename = path.basename;
 var util = require('util');
 var camelcase = require('cli-util').camelcase;
 
-var commands = [
-  'name',
-  'key',
-  'id'
-]
+var mutators = {
+  cmd: {
+    commands: false,
+    arguments: false,
+    names: false,
+    key: true,
+    name: true,
+    id: true,
+    description: true,
+    action: true
+  },
+  arg: {
+    names: false,
+    key: true,
+    name: true,
+    id: true,
+    optional: true,
+    multiple: true,
+    value: true,
+    converter: true,
+    extra: true,
+    description: true,
+    action: true
+  }
+}
 
-var properties = commands.concat([
-  'optional',
-  'multiple',
-  'value',
-  'converter',
-  'extra'
-]);
-var k;
+var k, keys;
 var delimiter = /[ ,|]+/;
-var methods = ['description', 'action'];
 var required = /^</;
 var multiple = /\.\.\./;
 
 function initialize(options, properties) {
   for(var z in options) {
-    if(~properties.indexOf(z)) this[z] = options[z];
+    if(~properties.indexOf(z) && options[z]) this[z](options[z]);
   }
-  if(options.description) this._description = options.description;
-  if(options.action) this._action = options.action;
 }
 
 var EventProxy = {
@@ -100,7 +110,7 @@ var Argument = function(name, description, options) {
   if(options === JSON) {
     this._converter = JSON;
   }else if(options && (typeof options == 'object') && !Array.isArray(options)) {
-    initialize.call(this, options, properties);
+    initialize.call(this, options, Object.keys(mutators.arg));
   }else if((typeof options == 'function') || this.isFunctionArray(options)){
     this._converter = options;
     if(arguments.length > 3 && this._value === undefined) {
@@ -166,22 +176,19 @@ Argument.prototype.getKey = function() {
   return k;
 }
 
-Argument.prototype.action = function() {
-  return this._action;
-}
-
-Argument.prototype.__defineGetter__('names', function() {
-  return this._names;
-});
-
-properties.forEach(function(prop) {
-  Argument.prototype.__defineGetter__(prop, function() {
-    return this['_' + prop];
-  });
-  Argument.prototype.__defineSetter__(prop, function(value) {
-    this['_' + prop] = value;
-  });
-});
+keys = Object.keys(mutators.arg);
+keys.forEach(function(name) {
+  var read = function() {
+    return this['_' + name];
+  }
+  var write = function(value) {
+    var key = '_' + name;
+    if(value === undefined) return this[key];
+    this[key] = value;
+    return this;
+  }
+  define(Argument.prototype, name, mutators.arg[name] ? write : read, false);
+})
 
 /**
  *  Represents an option argument.
@@ -197,6 +204,7 @@ util.inherits(Option, Argument);
  */
 var Flag = function() {
   Argument.apply(this, arguments);
+  //console.log('Flag %s %s', this._name, this._description);
   this._value = false;
 }
 
@@ -230,7 +238,7 @@ var Command = function(name, description, options) {
   define(this, 'args', undefined, true);
 
   if((typeof options == 'object')) {
-    initialize.call(this, options, commands);
+    initialize.call(this, options, Object.keys(mutators.cmd));
   }
   this._names = this._name.split(delimiter);
   this._key = this._names[0];
@@ -240,28 +248,19 @@ for(k in EventProxy) {
   define(Command.prototype, k, EventProxy[k], false);
 }
 
-Command.prototype.__defineGetter__('names', function() {
-  return this._names;
-});
-
-commands.forEach(function(prop) {
-  Command.prototype.__defineGetter__(prop, function() {
-    return this['_' + prop];
-  });
-  Command.prototype.__defineSetter__(prop, function(value) {
-    this['_' + prop] = value;
-  });
-});
-
-methods.forEach(function(prop) {
-  var mutator = function(value) {
-    var key = '_' + prop;
+keys = Object.keys(mutators.cmd);
+keys.forEach(function(name) {
+  var read = function() {
+    return this['_' + name];
+  }
+  var write = function(value) {
+    var key = '_' + name;
     if(value === undefined) return this[key];
     this[key] = value;
     return this;
   }
-  define(Command.prototype, prop, mutator, false);
-});
+  define(Command.prototype, name, mutators.cmd[name] ? write : read, false);
+})
 
 /**
  *  Define a command argument.
@@ -269,7 +268,7 @@ methods.forEach(function(prop) {
 function command(name, description, options) {
   var opt = (name instanceof Command) ? name
     : new Command(name, description, options);
-  this._commands[opt.key] = opt;
+  this._commands[opt.key()] = opt;
   return description ? this : opt;
 }
 define(Command.prototype, 'command', command, false);
@@ -284,7 +283,7 @@ function option(name, description, options, coerce, value) {
   }
   var opt = (name instanceof clazz) ? name
     : new clazz(name, description, options, coerce, value);
-  this._arguments[opt.key] = opt;
+  this._arguments[opt.key()] = opt;
   return this;
 }
 define(Command.prototype, 'option', option, false);
@@ -295,7 +294,7 @@ define(Command.prototype, 'option', option, false);
 function flag(name, description, options, coerce, value) {
   var opt = (name instanceof Flag) ? name
     : new Flag(name, description, options, coerce, value);
-  this._arguments[opt.key] = opt;
+  this._arguments[opt.key()] = opt;
   return this;
 }
 define(Command.prototype, 'flag', flag, false);
@@ -332,6 +331,7 @@ define(Program.prototype, 'usage', usage, false);
  *  @param action A function to invoke.
  */
 function version(version, name, description, action) {
+  if(!arguments.length && this._arguments.version) return this._version;
   if(typeof version == 'function') {
     action = version;
     version = null;
@@ -340,7 +340,7 @@ function version(version, name, description, action) {
   name = name || '-V --version';
   var flag = new Flag(
     name, description || 'print the program version', {action: action});
-  flag.key = 'version';
+  flag.key('version');
   this.flag(flag);
   return this;
 }
@@ -361,7 +361,7 @@ function help(name, description, action) {
   name = name || '-h --help';
   var flag = new Flag(
     name, description || 'print usage information', {action: action});
-  flag.key = 'help';
+  flag.key('help');
   this.flag(flag);
   return this;
 }
@@ -377,9 +377,6 @@ define(Program.prototype, 'help', help, false);
  */
 function create(package, name, description) {
   var root = new Program(basename(process.argv[1]));
-  properties.forEach(function(prop) {
-    if(prop != 'name' && prop != 'description') delete root['_' + prop];
-  })
   if(fs.existsSync(package)) {
     try {
       var pkg = root._package = require(package);

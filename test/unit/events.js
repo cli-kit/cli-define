@@ -11,10 +11,7 @@ describe('cli-define:', function() {
       expect(this).to.eql(cli);
       cli.removeAllListeners('alt');
       expect(cli.listeners('alt').length).to.eql(0);
-      console.dir(Object.keys(cli));
-      for(var z in cli) {
-        console.log('cli %s', z);
-      }
+      expect(Object.keys(cli).length).to.eql(0);
       done();
     })
     expect('emit' in cli).to.eql(true);
@@ -33,10 +30,7 @@ describe('cli-define:', function() {
       expect(this).to.eql(arg);
       arg.removeAllListeners('alt');
       expect(arg.listeners('alt').length).to.eql(0);
-      console.dir(Object.keys(arg));
-      for(var z in cli) {
-        console.log('cli %s', z);
-      }
+      expect(Object.keys(arg).length).to.eql(0);
       done();
     })
     expect('emit' in arg).to.eql(true);

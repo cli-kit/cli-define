@@ -13,11 +13,11 @@ describe('cli-define:', function() {
       action: action
     };
     var arg = new Option(opts);
-    expect(arg.name).to.eql(opts.name);
+    expect(arg.name()).to.eql(opts.name);
     expect(arg.action()).to.eql(action);
 
     arg = new Option(opts.name, opts.description, converter);
-    expect(arg.converter).to.eql(converter);
+    expect(arg.converter()).to.eql(converter);
     done();
   });
 })

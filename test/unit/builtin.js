@@ -16,8 +16,8 @@ describe('cli-define:', function() {
     cli.version(null, '-v, --version');
     expect(cli._arguments.version).to.be.an
       .instanceof(Flag);
-    expect(cli._arguments.version.name).to.eql('-v, --version');
-    expect(cli._arguments.version.names).to.eql(['-v', '--version']);
+    expect(cli._arguments.version.name()).to.eql('-v, --version');
+    expect(cli._arguments.version.names()).to.eql(['-v', '--version']);
     done();
   });
   it('should define help flag', function(done) {

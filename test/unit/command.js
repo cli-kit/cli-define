@@ -10,7 +10,7 @@ describe('cli-define:', function() {
       description: 'verbose option'
     };
     var arg = new Command(opts);
-    expect(arg.name).to.eql(opts.name);
+    expect(arg.name()).to.eql(opts.name);
     expect(arg.description()).to.eql(opts.description);
     expect('value' in arg).to.eql(false);
     done();
@@ -21,9 +21,9 @@ describe('cli-define:', function() {
     var cmd = cli._commands.install;
     expect(cmd).to.be.an
       .instanceof(Command);
-    expect(cmd.key).to.eql('install');
-    expect(cmd.name).to.eql('install i');
-    expect(cmd.names).to.eql(['install', 'i']);
+    expect(cmd.key()).to.eql('install');
+    expect(cmd.name()).to.eql('install i');
+    expect(cmd.names()).to.eql(['install', 'i']);
     done();
   });
 
@@ -33,20 +33,23 @@ describe('cli-define:', function() {
     var cmd = cli._commands.install;
     expect(cmd).to.be.an
       .instanceof(Command);
-    console.dir(Object.keys(cmd));
+    expect(Object.keys(cmd).length).to.eql(0);
+    var enumerated = [];
     for(var z in cmd) {
-      console.log('cmd %s', z);
+      enumerated.push(z);
     }
+    expect(enumerated.length).to.eql(0);
     done();
   });
 
   it('should trigger event', function(done) {
     cli.once('event', function() {
-
-    console.dir(Object.keys(cli));
-    for(var z in cli) {
-      console.log('cli %s', z);
-    }
+      var enumerated = [];
+      expect(Object.keys(cli).length).to.eql(0);
+      for(var z in cli) {
+        enumerated.push(z);
+      }
+      expect(enumerated.length).to.eql(0);
       done();
     })
     cli.emit('event');
