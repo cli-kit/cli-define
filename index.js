@@ -64,18 +64,6 @@ var Argument = function(name, description, options) {
   define(this, '_extra', undefined, true);
   define(this, '_names', undefined, true);
 
-  //this._name = name || '';
-  //this._description = description || '';
-  //this._key = '';
-  //this._id = '';
-  //this._optional = true;
-  //this._multiple = false;
-  //this._value;
-  //this._converter = null;
-  //this._action = null;
-  //this._extra = '';
-  //
-
   if(options === JSON) {
     this._converter = JSON;
   }else if(options && (typeof options == 'object') && !Array.isArray(options)) {
@@ -184,14 +172,20 @@ util.inherits(Flag, Argument);
  */
 var Command = function(name, description, options) {
   if(typeof name == 'object') options = name;
-  this._commands = {};
-  this._arguments = {};
-  this.args = null;
-  this._name = name || '';
-  this._description = description || '';
-  this._key = '';
-  this._id = '';
-  this._action = null;
+
+  // private
+  define(this, '_commands', {}, true);
+  define(this, '_arguments', {}, true);
+  define(this, '_name', name || '', true);
+  define(this, '_description', description || '', true);
+  define(this, '_key', '', true);
+  define(this, '_id', '', true);
+  define(this, '_action', undefined, true);
+  define(this, '_names', undefined, true);
+
+  // public
+  define(this, 'args', undefined, true);
+
   if((typeof options == 'object')) {
     initialize.call(this, options, commands);
   }
@@ -201,11 +195,9 @@ var Command = function(name, description, options) {
 
 util.inherits(Command, events.EventEmitter);
 
-
 Command.prototype.__defineGetter__('names', function() {
   return this._names;
 });
-
 
 commands.forEach(function(prop) {
   Command.prototype.__defineGetter__(prop, function() {
