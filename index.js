@@ -256,9 +256,12 @@ Command.prototype.flag = function(name, description, options, coerce, value) {
  */
 var Program = function() {
   Command.apply(this, arguments);
-  this._version = '0.0.1';
-  this._author = null;
-  this._usage = null;
+  define(this, '_version', '0.0.1', true);
+  define(this, '_author', null, true);
+  define(this, '_usage', null, true);
+  //this._version = '0.0.1';
+  //this._author = null;
+  //this._usage = null;
 }
 
 util.inherits(Program, Command);
