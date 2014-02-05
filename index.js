@@ -209,12 +209,13 @@ commands.forEach(function(prop) {
 });
 
 methods.forEach(function(prop) {
-  Command.prototype[prop] = function(value) {
+  var mutator = function(value) {
     var key = '_' + prop;
     if(value === undefined) return this[key];
     this[key] = value;
     return this;
   }
+  define(Command.prototype, prop, mutator, false);
 });
 
 /**
@@ -345,8 +346,8 @@ function create(package, name, description) {
         'package parse error %s (malformed json)', package));
     }
   }
-  if(name) root.name = name;
-  if(description) root.description = description;
+  if(name) root._name = name;
+  if(description) root._description = description;
   return root;
 }
 
