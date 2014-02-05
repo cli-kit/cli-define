@@ -17,7 +17,7 @@ var properties = commands.concat([
   'converter',
   'extra'
 ]);
-
+var k;
 var delimiter = /[ ,|]+/;
 var methods = ['description', 'action'];
 var required = /^</;
@@ -29,6 +29,33 @@ function initialize(options, properties) {
   }
   if(options.description) this._description = options.description;
   if(options.action) this._action = options.action;
+}
+
+var EventProxy = {
+  setMaxListeners: function() {
+    return this._emitter.setMaxListeners.apply(this, arguments);
+  },
+  emit: function() {
+    return this._emitter.emit.apply(this, arguments);
+  },
+  addListener: function() {
+    return this._emitter.addListener.apply(this, arguments);
+  },
+  on: function() {
+    return this._emitter.on.apply(this, arguments);
+  },
+  once: function() {
+    return this._emitter.once.apply(this, arguments);
+  },
+  removeListener: function() {
+    return this._emitter.removeListener.apply(this, arguments);
+  },
+  removeAllListeners: function() {
+    return this._emitter.removeAllListeners.apply(this, arguments);
+  },
+  listeners: function() {
+    return this._emitter.listeners.apply(this, arguments);
+  }
 }
 
 function define(obj, name, value, writable) {
@@ -64,6 +91,12 @@ var Argument = function(name, description, options) {
   define(this, '_extra', undefined, true);
   define(this, '_names', undefined, true);
 
+  // event emitter
+  define(this, '_emitter', new events.EventEmitter(), false);
+  define(this, '_events', null, true);
+  define(this, '_maxListeners', null, true);
+  define(this, 'domain', null, true);
+
   if(options === JSON) {
     this._converter = JSON;
   }else if(options && (typeof options == 'object') && !Array.isArray(options)) {
@@ -98,7 +131,9 @@ var Argument = function(name, description, options) {
   this._key = this.getKey();
 }
 
-util.inherits(Argument, events.EventEmitter);
+for(k in EventProxy) {
+  define(Argument.prototype, k, EventProxy[k], false);
+}
 
 /**
  *  Determines whether an array consists solely of functions
@@ -171,6 +206,7 @@ util.inherits(Flag, Argument);
  *  Represents a command argument.
  */
 var Command = function(name, description, options) {
+  //events.EventEmitter.call(this);
   if(typeof name == 'object') options = name;
 
   // private
@@ -182,6 +218,13 @@ var Command = function(name, description, options) {
   define(this, '_id', '', true);
   define(this, '_action', undefined, true);
   define(this, '_names', undefined, true);
+  define(this, '_package', undefined, true);
+
+  // event emitter
+  define(this, '_emitter', new events.EventEmitter(), false);
+  define(this, '_events', null, true);
+  define(this, '_maxListeners', null, true);
+  define(this, 'domain', null, true);
 
   // public
   define(this, 'args', undefined, true);
@@ -193,7 +236,9 @@ var Command = function(name, description, options) {
   this._key = this._names[0];
 }
 
-util.inherits(Command, events.EventEmitter);
+for(k in EventProxy) {
+  define(Command.prototype, k, EventProxy[k], false);
+}
 
 Command.prototype.__defineGetter__('names', function() {
   return this._names;

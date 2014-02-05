@@ -40,5 +40,15 @@ describe('cli-define:', function() {
     done();
   });
 
+  it('should trigger event', function(done) {
+    cli.once('event', function() {
 
+    console.dir(Object.keys(cli));
+    for(var z in cli) {
+      console.log('cli %s', z);
+    }
+      done();
+    })
+    cli.emit('event');
+  });
 })
