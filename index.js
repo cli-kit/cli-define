@@ -90,11 +90,13 @@ var EventProxy = {
   }
 }
 
+var enumerable = process.env.CLI_DEBUG ? true : false;
+
 function define(obj, name, value, writable) {
   writable = writable || false;
   Object.defineProperty(obj, name,
     {
-      enumerable: false,
+      enumerable: enumerable,
       configurable: false,
       writable: writable,
       value: value
