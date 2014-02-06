@@ -410,6 +410,7 @@ function create(package, name, description) {
 }
 
 module.exports = create;
+module.exports.define = define;
 module.exports.Program = Program;
 module.exports.Command = Command;
 module.exports.Option = Option;
