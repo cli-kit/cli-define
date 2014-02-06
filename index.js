@@ -410,13 +410,14 @@ function help(name, description, action) {
 define(Program.prototype, 'help', help, false);
 
 /**
- *  Initialize the root command from a package.json
- *  project descripton.
+ *  Initialize the program from a package.json
+ *  project descriptor, optionally overriding
+ *  the name, description and class to instantiate.
  *
  *  @param package The path to package.json.
  *  @param name A specific name for the root command (optional).
  *  @param description A specific description for the root command (optional).
- *  @param clazz A subclass to instantiate.
+ *  @param clazz A specific class to instantiate.
  */
 function create(package, name, description, clazz) {
   clazz = clazz || Program;
