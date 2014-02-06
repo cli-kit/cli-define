@@ -72,23 +72,6 @@ A function used to coerce the value of unparsed arguments.
 
 Get or set the program description.
 
-#### help([name], [description], [action])
-
-```javascript
-cli.help()
-cli.help('--help')
-cli.help(function(help){help.call(this)})
-```
-
-Adds a help flag to the program, scope for the `action` callback is the program instance.
-
-* `name`: A specific name for the help flag, default is `-h | --help`.
-* `description`: A specific description for the option, overrides the default.
-* `action`: A callback to invoke when the help option is encountered, signature is `function(help)` where `help` is the default callback function if you wish to re-use it's functionality.
-
-Returns the program for chaining.
-
-
 #### name([value])
 
 Get or set the program name.
@@ -104,24 +87,6 @@ Get or set a custom program usage string, overrides the default behaviour.
 * `usage`: The usage string.
 
 Returns the program for chaining or the usage string if it has been set and zero arguments are passed.
-
-#### version([version], [name], [description], [action])
-
-```javascript
-cli.version()
-cli.version('1.0.0')
-cli.version('1.0.0', '--version')
-cli.version(function(version){version.call(this)})
-```
-
-Adds a version flag to the program, scope for the `action` callback is the program instance. Configured version number is available via after setting the flag option by invoking with zero arguments.
-
-* `version`: A specific version for the program, overrides any version extracted from `package.json`.
-* `name`: A specific name for the version option flags, default is `-V | --version`.
-* `description`: A specific description for the option, overrides the default.
-* `action`: A callback to invoke when the version option is encountered, signature is `function(version)` where `version` is the default callback function if you wish to re-use it's functionality.
-
-Returns the program for chaining or the version string if a version flag exists and zero arguments are passed.
 
 ### Command(name, [description], [options])
 
