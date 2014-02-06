@@ -90,7 +90,7 @@ var EventProxy = {
   }
 }
 
-var enumerable = process.env.CLI_DEBUG ? true : false;
+var enumerable = process.env.CLI_TOOLKIT_DEBUG ? true : false;
 
 function define(obj, name, value, writable) {
   writable = writable || false;
