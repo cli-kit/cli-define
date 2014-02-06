@@ -369,51 +369,6 @@ function usage(usage) {
 define(Program.prototype, 'usage', usage, false);
 
 /**
- *  Adds a version flag to the program.
- *
- *  @param version A specific version number.
- *  @param name The argument name.
- *  @param description The argument description.
- *  @param action A function to invoke.
- */
-//function version(version, name, description, action) {
-  //if(!arguments.length && this._arguments.version) return this._version;
-  //if(typeof version == 'function') {
-    //action = version;
-    //version = null;
-  //}
-  //if(version) this._version = version;
-  //name = name || '-V --version';
-  //var flag = new Flag(
-    //name, description || 'print the program version', {action: action});
-  //flag.key('version');
-  //this.flag(flag);
-  //return this;
-//}
-//define(Program.prototype, 'version', version, false);
-
-/**
- *  Adds a help flag to the program.
- *
- *  @param name The argument name.
- *  @param description The argument description.
- *  @param action A function to invoke.
- */
-//function help(name, description, action) {
-  //if(typeof name == 'function') {
-    //action = name;
-    //name = null;
-  //}
-  //name = name || '-h --help';
-  //var flag = new Flag(
-    //name, description || 'print usage information', {action: action});
-  //flag.key('help');
-  //this.flag(flag);
-  //return this;
-//}
-//define(Program.prototype, 'help', help, false);
-
-/**
  *  Initialize the program from a package.json
  *  project descriptor, optionally overriding
  *  the name, description and class to instantiate.
