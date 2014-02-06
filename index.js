@@ -308,6 +308,7 @@ define(Command.prototype, 'flag', flag, false);
 var Program = function() {
   Command.apply(this, arguments);
   define(this, '_version', '0.0.1', true);
+  define(this, '_package', undefined, true);
   define(this, '_converter', undefined, true);
   define(this, '_author', undefined, true);
   define(this, '_usage', undefined, true);
@@ -325,6 +326,31 @@ keys.forEach(function(name) {
   }
   define(Program.prototype, name, write, false);
 })
+
+/**
+ *  Set the program package descriptor.
+ *
+ *  @param path The path to the package descriptor.
+ */
+function package(path) {
+  if(!arguments.length && this._package) return this._package;
+  if(path && fs.existsSync(path)) {
+    try {
+      var pkg = this._package = require(path);
+      this._version = pkg.version;
+      if(pkg.author) this._author = pkg.author;
+      if(pkg.description) this._description = pkg.description;
+    }catch(e) {
+      throw new Error(util.format(
+        'package parse error %s (malformed json)', path));
+    }
+  }else if(path) {
+    throw new Error(util.format(
+      'package descriptor %s does not exist', path));
+  }
+  return this;
+}
+define(Program.prototype, 'package', package, false);
 
 /**
  *  Set the program usage string.
@@ -390,23 +416,15 @@ define(Program.prototype, 'help', help, false);
  *  @param package The path to package.json.
  *  @param name A specific name for the root command (optional).
  *  @param description A specific description for the root command (optional).
+ *  @param clazz A subclass to instantiate.
  */
-function create(package, name, description) {
-  var root = new Program(basename(process.argv[1]));
-  if(fs.existsSync(package)) {
-    try {
-      var pkg = root._package = require(package);
-      root._version = pkg.version;
-      if(pkg.author) root._author = pkg.author;
-      if(pkg.description) root._description = pkg.description;
-    }catch(e) {
-      throw new Error(util.format(
-        'package parse error %s (malformed json)', package));
-    }
-  }
-  if(name) root._name = name;
-  if(description) root._description = description;
-  return root;
+function create(package, name, description, clazz) {
+  clazz = clazz || Program;
+  var program = new clazz(basename(process.argv[1]));
+  program.package(package);
+  if(name) program.name(name);
+  if(description) program.description(description);
+  return program;
 }
 
 module.exports = create;
