@@ -44,6 +44,25 @@ function initialize(options, properties) {
   }
 }
 
+/**
+ *  Retrieve the key for the option.
+ */
+function getKey() {
+  var k, i, v;
+  for(i = 0;i < this._names.length;i++) {
+    v = this._names[i];
+    k = camelcase(v.replace(/^-+/, ''));
+    if(/^--[^-]/.test(v)) {
+      return k;
+    }
+  }
+  if(this._names.length && this._names[0]) {
+    return this._names[0];
+  }
+  throw new Error('Invalid option name \'' + this._name + '\'');
+}
+
+
 var EventProxy = {
   setMaxListeners: function() {
     return this._emitter.setMaxListeners.apply(this, arguments);
@@ -141,7 +160,7 @@ var Argument = function(name, description, options) {
   if(multiple.test(this._extra)) {
     this._multiple = true;
   }
-  this._key = this.getKey();
+  this._key = getKey.call(this);
 }
 
 for(k in EventProxy) {
@@ -162,21 +181,6 @@ Argument.prototype.isFunctionArray = function(arr) {
     if(item !== JSON && !(typeof item == 'function')) return false;
   }
   return true;
-}
-
-/**
- *  Retrieve the key for the option.
- */
-Argument.prototype.getKey = function() {
-  var k, i, v;
-  for(i = 0;i < this._names.length;i++) {
-    v = this._names[i];
-    k = camelcase(v.replace(/^-+/, ''));
-    if(/^--[^-]/.test(v)) {
-      return k;
-    }
-  }
-  return k;
 }
 
 keys = Object.keys(mutators.arg);
@@ -244,7 +248,7 @@ var Command = function(name, description, options) {
     initialize.call(this, options, Object.keys(mutators.cmd));
   }
   this._names = this._name.split(delimiter);
-  this._key = this._names[0];
+  this._key = getKey.call(this);
 }
 
 for(k in EventProxy) {
@@ -372,21 +376,21 @@ define(Program.prototype, 'usage', usage, false);
  *  @param description The argument description.
  *  @param action A function to invoke.
  */
-function version(version, name, description, action) {
-  if(!arguments.length && this._arguments.version) return this._version;
-  if(typeof version == 'function') {
-    action = version;
-    version = null;
-  }
-  if(version) this._version = version;
-  name = name || '-V --version';
-  var flag = new Flag(
-    name, description || 'print the program version', {action: action});
-  flag.key('version');
-  this.flag(flag);
-  return this;
-}
-define(Program.prototype, 'version', version, false);
+//function version(version, name, description, action) {
+  //if(!arguments.length && this._arguments.version) return this._version;
+  //if(typeof version == 'function') {
+    //action = version;
+    //version = null;
+  //}
+  //if(version) this._version = version;
+  //name = name || '-V --version';
+  //var flag = new Flag(
+    //name, description || 'print the program version', {action: action});
+  //flag.key('version');
+  //this.flag(flag);
+  //return this;
+//}
+//define(Program.prototype, 'version', version, false);
 
 /**
  *  Adds a help flag to the program.
@@ -395,19 +399,19 @@ define(Program.prototype, 'version', version, false);
  *  @param description The argument description.
  *  @param action A function to invoke.
  */
-function help(name, description, action) {
-  if(typeof name == 'function') {
-    action = name;
-    name = null;
-  }
-  name = name || '-h --help';
-  var flag = new Flag(
-    name, description || 'print usage information', {action: action});
-  flag.key('help');
-  this.flag(flag);
-  return this;
-}
-define(Program.prototype, 'help', help, false);
+//function help(name, description, action) {
+  //if(typeof name == 'function') {
+    //action = name;
+    //name = null;
+  //}
+  //name = name || '-h --help';
+  //var flag = new Flag(
+    //name, description || 'print usage information', {action: action});
+  //flag.key('help');
+  //this.flag(flag);
+  //return this;
+//}
+//define(Program.prototype, 'help', help, false);
 
 /**
  *  Initialize the program from a package.json
