@@ -45,21 +45,40 @@ function initialize(options, properties) {
 }
 
 /**
- *  Retrieve the key for the option.
+ *  Retrieve the key for an option.
+ *
+ *  Scope is the option. Alternatively you may pass a
+ *  string of the raw name passed when instantiating the options.
+ *
+ *  @param names Array of names or raw string name (optional).
  */
-function getKey() {
-  var k, i, v;
-  for(i = 0;i < this._names.length;i++) {
-    v = this._names[i];
-    k = camelcase(v.replace(/^-+/, ''));
-    if(/^--[^-]/.test(v)) {
-      return k;
-    }
+function getKey(names) {
+  var k, names = names || this._names;
+  var name = this._name;
+  if(typeof names == 'string') {
+    name = names;
+    names = names.split(delimiter);
   }
-  if(this._names.length && this._names[0]) {
-    return this._names[0];
+  if(!names.length || !names[0]) {
+    throw new Error('Invalid option name \'' + name + '\'');
   }
-  throw new Error('Invalid option name \'' + this._name + '\'');
+
+  var k = names.reduce(
+    function (a, b) { return a.length > b.length ? a : b; });
+  //console.dir(k);
+  k = k.replace(/^-+/, '');
+  return camelcase(k.toLowerCase());
+
+  //for(i = 0;i < names.length;i++) {
+    //v = names[i];
+    //k = camelcase(v.replace(/^-+/, ''));
+    //if(/^--[^-]/.test(v)) {
+      //return k;
+    //}
+  //}
+  //if(names.length && names[0]) {
+    //return camelcase(names[0].toLowerCase());
+  //}
 }
 
 
@@ -391,6 +410,7 @@ function create(package, name, description, clazz) {
 
 module.exports = create;
 module.exports.define = define;
+module.exports.key = getKey;
 module.exports.Program = Program;
 module.exports.Command = Command;
 module.exports.Option = Option;
