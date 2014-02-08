@@ -65,20 +65,8 @@ function getKey(names) {
 
   var k = names.reduce(
     function (a, b) { return a.length > b.length ? a : b; });
-  //console.dir(k);
   k = k.replace(/^-+/, '');
   return camelcase(k.toLowerCase());
-
-  //for(i = 0;i < names.length;i++) {
-    //v = names[i];
-    //k = camelcase(v.replace(/^-+/, ''));
-    //if(/^--[^-]/.test(v)) {
-      //return k;
-    //}
-  //}
-  //if(names.length && names[0]) {
-    //return camelcase(names[0].toLowerCase());
-  //}
 }
 
 
@@ -211,7 +199,7 @@ keys.forEach(function(name) {
   }
   var write = function(value) {
     var key = '_' + name;
-    if(value === undefined) return this[key];
+    if(!arguments.length) return this[key];
     this[key] = value;
     return this;
   }
@@ -345,7 +333,7 @@ keys = Object.keys(mutators.prg);
 keys.forEach(function(name) {
   var write = function(value) {
     var key = '_' + name;
-    if(value === undefined) return this[key];
+    if(!arguments.length) return this[key];
     this[key] = value;
     return this;
   }
