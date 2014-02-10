@@ -259,9 +259,6 @@ var Command = function(name, description, options) {
   define(this, '_maxListeners', undefined, true);
   define(this, 'domain', undefined, true);
 
-  // public
-  define(this, 'args', undefined, true);
-
   if((typeof options == 'object')) {
     initialize.call(this, options, Object.keys(mutators.cmd));
   }
