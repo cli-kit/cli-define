@@ -334,7 +334,6 @@ var Program = function() {
   define(this, '_version', '0.0.1', true);
   define(this, '_package', undefined, true);
   define(this, '_converter', undefined, true);
-  define(this, '_author', undefined, true);
   define(this, '_usage', undefined, true);
 }
 
@@ -362,7 +361,6 @@ function package(path) {
     try {
       var pkg = this._package = require(path);
       this._version = pkg.version;
-      if(pkg.author) this._author = pkg.author;
       if(pkg.description) this._description = pkg.description;
     }catch(e) {
       throw new Error(util.format(
