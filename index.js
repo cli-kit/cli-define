@@ -327,7 +327,6 @@ var Program = function() {
   define(this, '_version', '0.0.1', true);
   define(this, '_package', undefined, true);
   define(this, '_converter', undefined, true);
-  define(this, '_usage', undefined, true);
 }
 
 util.inherits(Program, Command);
@@ -366,18 +365,6 @@ function package(path) {
   return this;
 }
 define(Program.prototype, 'package', package, false);
-
-/**
- *  Set the program usage string.
- *
- *  @param usage The program usage string.
- */
-function usage(usage) {
-  if(!arguments.length && this._usage) return this._usage;
-  this._usage = usage;
-  return this;
-}
-define(Program.prototype, 'usage', usage, false);
 
 /**
  *  Initialize the program from a package.json

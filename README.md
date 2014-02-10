@@ -76,18 +76,6 @@ Get or set the program description.
 
 Get or set the program name.
 
-#### usage(usage)
-
-```javascript
-cli.usage('[command] [options] <files...>')
-```
-
-Get or set a custom program usage string, overrides the default behaviour. 
-
-* `usage`: The usage string.
-
-Returns the program for chaining or the usage string if it has been set and zero arguments are passed.
-
 ### Command(name, [description], [options])
 
 Represents a command option.
