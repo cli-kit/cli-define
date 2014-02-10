@@ -103,11 +103,31 @@ Adds a command option.
 
 If `description` is specified returns the `Program` otherwise the `Command` instance.
 
+#### commands()
+
+Get a map of the defined commands.
+
 #### description([value])
 
 Get or set the description for the command.
 
 * `description`: The argument description.
+
+#### flag(name, [description], [options])
+
+```javascript
+cli.flag('-v --verbose', 'print more information')
+cli.flag('-v, --verbose', 'print more information')
+cli.flag('-v | --verbose', 'print more information')
+```
+
+Explicitly adds a flag option to the command.
+
+* `name`: The name of the flag.
+* `description`: The flag description.
+* `options`: The argument options.
+
+Returns the parent `Command` for chaining.
 
 #### key([value])
 
@@ -142,21 +162,9 @@ Adds an option to the command.
 
 Returns the parent `Command` for chaining.
 
-#### flag(name, [description], [options])
+#### options()
 
-```javascript
-cli.flag('-v --verbose', 'print more information')
-cli.flag('-v, --verbose', 'print more information')
-cli.flag('-v | --verbose', 'print more information')
-```
-
-Explicitly adds a flag option to the command.
-
-* `name`: The name of the flag.
-* `description`: The flag description.
-* `options`: The argument options.
-
-Returns the parent `Command` for chaining.
+Get a map of the defined options.
 
 ### Option(name, [description], [options])
 
