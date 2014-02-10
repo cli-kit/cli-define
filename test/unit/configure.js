@@ -9,7 +9,7 @@ describe('cli-define:', function() {
     var program = cli(null, name, description);
     expect(program.name()).to.eql(name);
     expect(program.description()).to.eql(description);
-    //expect(cli._arguments.type.optional).to.eql(true);
+    //expect(cli._options.type.optional).to.eql(true);
     done();
   });
 

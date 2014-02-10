@@ -24,7 +24,7 @@ describe('cli-define:', function() {
   it('should explicitly add a flag', function(done) {
     cli
       .flag('-v --verbose', 'print more information')
-    expect(cli._arguments.verbose).to.be.an
+    expect(cli._options.verbose).to.be.an
       .instanceof(Flag);
     done();
   });
