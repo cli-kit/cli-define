@@ -6,13 +6,27 @@ var Command = require('../..').Command;
 describe('cli-define:', function() {
   it('should create command', function(done) {
     var opts = {
-      name: 'install',
+      name: 'install, ins, i',
       description: 'verbose option'
     };
     var arg = new Command(opts);
     expect(arg.name()).to.eql(opts.name);
     expect(arg.description()).to.eql(opts.description);
     expect('value' in arg).to.eql(false);
+    done();
+  });
+  it('should coerce command (toString)', function(done) {
+    var opts = {
+      name: 'install, ins, i',
+      description: 'verbose option'
+    };
+    var arg = new Command(opts);
+    var s = arg.toString();
+    expect(s).to.eql('[object Object]');
+    s = arg.toString(null);
+    expect(s).to.eql('install | ins | i');
+    s = arg.toString(', ');
+    expect(s).to.eql('install, ins, i');
     done();
   });
   it('should define command names (aliases)', function(done) {

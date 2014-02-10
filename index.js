@@ -99,6 +99,13 @@ var EventProxy = {
 
 var enumerable = process.env.CLI_TOOLKIT_DEBUG ? true : false;
 
+function toString(delimiter) {
+  if(!arguments.length) return Object.prototype.toString.call(this);
+  delimiter = delimiter || ' | ';
+  var names = this.names() || [];
+  return names.join(delimiter);
+}
+
 function define(obj, name, value, writable) {
   writable = writable || false;
   Object.defineProperty(obj, name,
@@ -171,6 +178,8 @@ var Argument = function(name, description, options) {
   }
   this._key = getKey.call(this);
 }
+
+define(Argument.prototype, 'toString', toString, false);
 
 for(k in EventProxy) {
   define(Argument.prototype, k, EventProxy[k], false);
@@ -259,6 +268,8 @@ var Command = function(name, description, options) {
   this._names = this._name.split(delimiter);
   this._key = getKey.call(this);
 }
+
+define(Command.prototype, 'toString', toString, false);
 
 for(k in EventProxy) {
   define(Command.prototype, k, EventProxy[k], false);
