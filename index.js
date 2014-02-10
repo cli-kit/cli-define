@@ -6,8 +6,6 @@ var camelcase = require('cli-util').camelcase;
 
 var mutators = {
   cmd: {
-    commands: false,
-    arguments: false,
     names: false,
     key: true,
     name: true,

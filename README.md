@@ -86,14 +86,6 @@ Get or set a callback function for the command.
 
 * `fn`: The callback function.
 
-#### arguments()
-
-Map of non-command options (read only).
-
-#### commands()
-
-Map of command options (read only).
-
 #### command(name, [description], [options])
 
 ```javascript
