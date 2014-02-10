@@ -11,7 +11,6 @@ var mutators = {
     names: false,
     key: true,
     name: true,
-    id: true,
     description: true,
     action: true
   },
@@ -19,7 +18,6 @@ var mutators = {
     names: false,
     key: true,
     name: true,
-    id: true,
     optional: true,
     multiple: true,
     value: true,
@@ -130,7 +128,6 @@ var Argument = function(name, description, options) {
   define(this, '_name', name || '', true);
   define(this, '_description', description || '', true);
   define(this, '_key', '', true);
-  define(this, '_id', '', true);
   define(this, '_optional', true, true);
   define(this, '_multiple', false, true);
   define(this, '_value', undefined, true);
@@ -248,7 +245,6 @@ var Command = function(name, description, options) {
   define(this, '_name', name || '', true);
   define(this, '_description', description || '', true);
   define(this, '_key', '', true);
-  define(this, '_id', '', true);
   define(this, '_action', undefined, true);
   define(this, '_names', undefined, true);
   define(this, '_package', undefined, true);

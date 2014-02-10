@@ -133,10 +133,6 @@ Get or set the description for the command.
 
 Get or set the `key` for the command automatically generated based on the command `name`.
 
-#### id([value])
-
-A field reserved for user data, currently unused but could be used for i18n message lookup.
-
 #### name([value])
 
 Get or set the full string name of the command.
@@ -227,10 +223,6 @@ Get or set the `key` for the argument automatically generated based on the argum
 -v --verbose  // => verbose
 -p --port <n> // => port
 ```
-
-#### id([value])
-
-A field reserved for user data, currently unused but could be used for i18n message lookup.
 
 #### multiple([value])
 
