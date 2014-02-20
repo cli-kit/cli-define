@@ -3,7 +3,26 @@ var expect = require('chai').expect;
 var cli = require('../..')(path.join(__dirname, '..', '..', 'package.json'));
 var Command = require('../..').Command;
 
+/**
+ *  Utility to remove a module from the cache.
+ */
+function cache(id) {
+  for(var z in require.cache) {
+    if(z === id) {
+      delete require.cache[z];
+      break;
+    }
+  }
+}
+
 describe('cli-define:', function() {
+  it('should throw type error on invalid name', function(done) {
+    function fn() {
+      var arg = new Command(false);
+    }
+    expect(fn).throws(TypeError);
+    done();
+  });
   it('should create command', function(done) {
     var opts = {
       name: 'install, ins, i',
@@ -40,7 +59,6 @@ describe('cli-define:', function() {
     expect(cmd.names()).to.eql(['install', 'i']);
     done();
   });
-
   it('should not enumerate builtin properties and methods', function(done) {
     cli
       .command('install i', 'install packages')
@@ -55,7 +73,6 @@ describe('cli-define:', function() {
     expect(enumerated.length).to.eql(0);
     done();
   });
-
   it('should trigger event', function(done) {
     cli.once('event', function() {
       var enumerated = [];
@@ -67,5 +84,21 @@ describe('cli-define:', function() {
       done();
     })
     cli.emit('event');
+  });
+  it('should enumerate (CLI_TOOLKIT_DEBUG)', function(done) {
+    var id = path.normalize(path.join(__dirname, '..', '..', 'index.js'));
+    cache(id);
+    process.env.CLI_TOOLKIT_DEBUG = true;
+    var cli = require('../..')();
+    cli.command('install i', 'install packages')
+    var cmd = cli._commands.install;
+    var enumerated = [];
+    for(var z in cmd) {
+      enumerated.push(z);
+    }
+    expect(!!~enumerated.indexOf('command')).to.eql(true);
+    delete process.env.CLI_TOOLKIT_DEBUG;
+    cache(id);
+    done();
   });
 })

@@ -57,10 +57,6 @@ function getKey(names) {
     name = names;
     names = names.split(delimiter);
   }
-  if(!names.length || !names[0]) {
-    throw new Error('Invalid option name \'' + name + '\'');
-  }
-
   var k = names.reduce(
     function (a, b) { return a.length > b.length ? a : b; });
   k = k.replace(/^-+/, '');
@@ -100,7 +96,7 @@ var enumerable = process.env.CLI_TOOLKIT_DEBUG ? true : false;
 function toString(delimiter) {
   if(!arguments.length) return Object.prototype.toString.call(this);
   delimiter = delimiter || ' | ';
-  var names = this.names() || [];
+  var names = this.names();
   return names.join(delimiter);
 }
 
@@ -125,7 +121,7 @@ function define(obj, name, value, writable) {
  */
 var Argument = function(name, description, options) {
   if(typeof name == 'object') options = name;
-  define(this, '_name', name || '', true);
+  define(this, '_name', name, true);
   define(this, '_description', description || '', true);
   define(this, '_key', '', true);
   define(this, '_optional', true, true);
@@ -159,6 +155,11 @@ var Argument = function(name, description, options) {
       this._converter = arguments[3];
     }
   }
+
+  if(!this._name || typeof this._name !== 'string') {
+    throw new TypeError('Invalid argument name \'' + this._name + '\'');
+  }
+
   this._names = this._name.split(delimiter);
   for(var i = 0;i < this._names.length;i++) {
     if(/^(\[|<)/.test(this._names[i])) {
@@ -258,6 +259,11 @@ var Command = function(name, description, options) {
   if((typeof options == 'object')) {
     initialize.call(this, options, Object.keys(mutators.cmd));
   }
+
+  if(!this._name || typeof this._name !== 'string') {
+    throw new TypeError('Invalid command name \'' + this._name + '\'');
+  }
+
   this._names = this._name.split(delimiter);
   this._key = getKey.call(this);
 }

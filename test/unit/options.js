@@ -5,6 +5,13 @@ var Option = require('../..').Option;
 var Flag = require('../..').Flag;
 
 describe('cli-define:', function() {
+  it('should throw type error on invalid name', function(done) {
+    function fn() {
+      var arg = new Option(false);
+    }
+    expect(fn).throws(TypeError);
+    done();
+  });
   it('should create argument with options object', function(done) {
     function converter(){}
     function action(){console.log('action called.')}
@@ -19,6 +26,17 @@ describe('cli-define:', function() {
 
     arg = new Option(opts.name, opts.description, converter);
     expect(arg.converter()).to.eql(converter);
+    done();
+  });
+  it('should ignore unknown option', function(done) {
+    var opts = {
+      name: '-v, --verbose',
+      description: 'verbose option',
+      unknown: true
+    };
+    var arg = new Option(opts);
+    expect(arg.name()).to.eql(opts.name);
+    expect(arg.unknown).to.eql(undefined);
     done();
   });
   it('should explicitly add a flag', function(done) {
