@@ -351,22 +351,28 @@ keys.forEach(function(name) {
 /**
  *  Set the program package descriptor.
  *
- *  @param path The path to the package descriptor.
+ *  @param path The path to the package descriptor or an existing
+ *  package object.
  */
 function package(path) {
   if(!arguments.length && this._package) return this._package;
-  if(path && fs.existsSync(path)) {
+  var pkg;
+  if(path && typeof(path) === 'string' && fs.existsSync(path)) {
     try {
-      var pkg = this._package = require(path);
-      this._version = pkg.version;
-      if(pkg.description) this._description = pkg.description;
+      pkg = this._package = require(path);
     }catch(e) {
       throw new Error(util.format(
         'package parse error %s (malformed json)', path));
     }
-  }else if(path) {
+  }else if(path && typeof path === 'object') {
+    pkg = this._package = path;
+  }else if(typeof path === 'string') {
     throw new Error(util.format(
       'package descriptor %s does not exist', path));
+  }
+  if(pkg) {
+    this._version = pkg.version;
+    if(pkg.description) this._description = pkg.description;
   }
   return this;
 }

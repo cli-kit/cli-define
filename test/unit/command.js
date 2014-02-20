@@ -26,7 +26,7 @@ describe('cli-define:', function() {
   it('should create command', function(done) {
     var opts = {
       name: 'install, ins, i',
-      description: 'verbose option'
+      description: 'install packages'
     };
     var arg = new Command(opts);
     expect(arg.name()).to.eql(opts.name);
@@ -37,7 +37,7 @@ describe('cli-define:', function() {
   it('should coerce command (toString)', function(done) {
     var opts = {
       name: 'install, ins, i',
-      description: 'verbose option'
+      description: 'install packages'
     };
     var arg = new Command(opts);
     var s = arg.toString();
@@ -46,6 +46,15 @@ describe('cli-define:', function() {
     expect(s).to.eql('install | ins | i');
     s = arg.toString(', ');
     expect(s).to.eql('install, ins, i');
+    done();
+  });
+  it('should use existing command', function(done) {
+    var opts = {
+      name: 'install, ins, i',
+      description: 'install packages'
+    };
+    var arg = new Command(opts);
+    cli.command(arg);
     done();
   });
   it('should define command names (aliases)', function(done) {

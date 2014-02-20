@@ -4,6 +4,14 @@ var pkgpath = path.join(__dirname, '..', '..', 'package.json')
 var pkg = require('../../package.json');
 
 describe('cli-define:', function() {
+  it('should throw error on missing package descriptor', function(done) {
+    var cli = require('../..')();
+    function fn() {
+      cli.package('unknown-package.json');
+    }
+    expect(fn).throws(Error);
+    done();
+  });
   it('should define package information (module)', function(done) {
     var cli = require('../..')(pkgpath);
     expect(cli.package()).to.be.an('object').to.eql(pkg);
@@ -15,12 +23,10 @@ describe('cli-define:', function() {
     expect(cli.package()).to.be.an('object').to.eql(pkg);
     done();
   });
-  it('should throw error on missing package descriptor', function(done) {
-    var cli = require('../..')();
-    function fn() {
-      cli.package('unknown-package.json');
-    }
-    expect(fn).throws(Error);
+  it('should define package information (object)', function(done) {
+    delete pkg.description;
+    var cli = require('../..')(pkg);
+    expect(cli.package()).to.be.an('object').to.eql(pkg);
     done();
   });
 })

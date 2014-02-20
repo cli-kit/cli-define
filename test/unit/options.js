@@ -39,6 +39,26 @@ describe('cli-define:', function() {
     expect(arg.unknown).to.eql(undefined);
     done();
   });
+  it('should use existing option', function(done) {
+    var opts = {
+      name: '-v, --verbose',
+      description: 'verbose option'
+    };
+    var arg = new Option(opts);
+    cli.option(arg);
+    expect(cli._options.verbose.name()).to.eql(opts.name);
+    done();
+  });
+  it('should use existing flag', function(done) {
+    var opts = {
+      name: '-v, --verbose',
+      description: 'verbose option'
+    };
+    var arg = new Flag(opts);
+    cli.flag(arg);
+    expect(cli._options.verbose.name()).to.eql(opts.name);
+    done();
+  });
   it('should explicitly add a flag', function(done) {
     cli
       .flag('-v --verbose', 'print more information')
