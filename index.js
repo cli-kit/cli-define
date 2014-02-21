@@ -248,7 +248,7 @@ var Command = function(name, description, options) {
   define(this, '_key', '', true);
   define(this, '_action', undefined, true);
   define(this, '_names', undefined, true);
-  define(this, '_package', undefined, true);
+  //define(this, '_package', undefined, true);
 
   // event emitter
   define(this, '_emitter', new events.EventEmitter(), false);
@@ -355,7 +355,11 @@ keys.forEach(function(name) {
  *  package object.
  */
 function package(path) {
-  if(!arguments.length && this._package) return this._package;
+  if(!arguments.length) return this._package;
+  if(arguments.length === 1 && !path) {
+    this._package = path;
+    return this._package;
+  }
   var pkg;
   if(path && typeof(path) === 'string' && fs.existsSync(path)) {
     try {
@@ -366,14 +370,13 @@ function package(path) {
     }
   }else if(path && typeof path === 'object') {
     pkg = this._package = path;
-  }else if(typeof path === 'string') {
+  }
+  if(!pkg) {
     throw new Error(util.format(
       'package descriptor %s does not exist', path));
   }
-  if(pkg) {
-    this._version = pkg.version;
-    if(pkg.description) this._description = pkg.description;
-  }
+  this._version = pkg.version;
+  if(pkg.description) this._description = pkg.description;
   return this;
 }
 define(Program.prototype, 'package', package, false);

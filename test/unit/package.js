@@ -29,4 +29,11 @@ describe('cli-define:', function() {
     expect(cli.package()).to.be.an('object').to.eql(pkg);
     done();
   });
+  it('should clear package information (object)', function(done) {
+    delete pkg.description;
+    var cli = require('../..')(pkg);
+    cli.package(null);
+    expect(cli.package()).to.eql(null);
+    done();
+  });
 })
