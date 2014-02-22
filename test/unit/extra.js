@@ -52,4 +52,17 @@ describe('cli-define:', function() {
     expect(cli._options.another.names()).to.eql(['-a', '--another']);
     done();
   });
+  it('should create argument with equals on short option', function(done) {
+    cli.option('--another, -a=VALUE', 'another option')
+    expect(cli._options.another.extra()).to.eql('=VALUE');
+    expect(cli._options.another.names()).to.eql(['-a', '--another']);
+    done();
+  });
+  it('should create argument with multiple long options', function(done) {
+    cli.option('--another, --another-option=VALUE', 'another option')
+    expect(cli._options.another.extra()).to.eql('=VALUE');
+    expect(cli._options.anotherOption.names()).to.eql(
+      ['--another', '--another-option']);
+    done();
+  });
 })

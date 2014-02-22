@@ -78,18 +78,11 @@ function getExtra() {
   var name = this._name.replace(re.extra(), "$1");
   this._names = name.split(re.delimiter());
   if(!this._names[this._names.length - 1]) this._names.pop();
-  //var scope = this;
-  //this._names.forEach(function(name, index, arr) {
-    //var bracket = name.indexOf('[');
-    //var angle = name.indexOf('<');
-    //var ind;
-    //if(~bracket || ~angle) {
-      //ind = ~bracket ? bracket : angle;
-      //scope._extra = name.substr(ind);
-      //name = name.substr(0, ind);
-      //arr[index] = name;
-    //}
-  //})
+  // sort short options before long options
+  this._names.sort(function(a, b) {
+    var re = /^-[^-]/;
+    return re.test(a) ? -1 : re.test(b) ? 1 : 0;
+  });
 }
 
 var EventProxy = {
