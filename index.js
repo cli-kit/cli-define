@@ -168,6 +168,18 @@ var Argument = function(name, description, options) {
       break;
     }
   }
+  var scope = this;
+  this._names.forEach(function(name, index, arr) {
+    var bracket = name.indexOf('[');
+    var angle = name.indexOf('<');
+    var ind;
+    if(~bracket || ~angle) {
+      ind = ~bracket ? bracket : angle;
+      scope._extra = name.substr(ind);
+      name = name.substr(0, ind);
+      arr[index] = name;
+    }
+  })
   if(required.test(this._extra)) {
     this._optional = false;
   }

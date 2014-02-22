@@ -74,4 +74,26 @@ describe('cli-define:', function() {
     expect(fn).throws(Error);
     done();
   });
+  it('should create argument with flush value (bracket)', function(done) {
+    var opts = {
+      name: '-a, --another-option[=VALUE]',
+      description: 'another option',
+    };
+    var arg = new Option(opts);
+    expect(arg.name()).to.eql(opts.name);
+    expect(arg.names()).to.eql(['-a', '--another-option']);
+    expect(arg.extra()).to.eql('[=VALUE]')
+    done();
+  });
+  it('should create argument with flush value (angle)', function(done) {
+    var opts = {
+      name: '-a, --another-option<=VALUE>',
+      description: 'another option',
+    };
+    var arg = new Option(opts);
+    expect(arg.name()).to.eql(opts.name);
+    expect(arg.names()).to.eql(['-a', '--another-option']);
+    expect(arg.extra()).to.eql('<=VALUE>')
+    done();
+  });
 })
