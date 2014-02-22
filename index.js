@@ -36,7 +36,7 @@ var re = {
   delimiter: function(){return /[ ,|]+/;},
   required: function(){return /^=?</;},
   multiple: function(){return /\.\.\./;},
-  extra: function(){return /^[^\[<]*((\[|<).*)/;}
+  extra: function(){return /^([^=\[<]*)((=|\[|<).*)/;}
 }
 
 function initialize(options, properties) {
@@ -73,25 +73,23 @@ function getKey(names) {
  *  the extra portion.
  */
 function getExtra() {
-  this._extra = this._name.replace(re.extra(), "$1");
-  for(var i = 0;i < this._names.length;i++) {
-    if(/^(\[|<)/.test(this._names[i])) {
-      this._names = this._names.slice(0, i);
-      break;
-    }
-  }
-  var scope = this;
-  this._names.forEach(function(name, index, arr) {
-    var bracket = name.indexOf('[');
-    var angle = name.indexOf('<');
-    var ind;
-    if(~bracket || ~angle) {
-      ind = ~bracket ? bracket : angle;
-      scope._extra = name.substr(ind);
-      name = name.substr(0, ind);
-      arr[index] = name;
-    }
-  })
+  if(!re.extra().test(this._name)) return;
+  this._extra = this._name.replace(re.extra(), "$2");
+  var name = this._name.replace(re.extra(), "$1");
+  this._names = name.split(re.delimiter());
+  if(!this._names[this._names.length - 1]) this._names.pop();
+  //var scope = this;
+  //this._names.forEach(function(name, index, arr) {
+    //var bracket = name.indexOf('[');
+    //var angle = name.indexOf('<');
+    //var ind;
+    //if(~bracket || ~angle) {
+      //ind = ~bracket ? bracket : angle;
+      //scope._extra = name.substr(ind);
+      //name = name.substr(0, ind);
+      //arr[index] = name;
+    //}
+  //})
 }
 
 var EventProxy = {
