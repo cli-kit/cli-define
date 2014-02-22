@@ -161,9 +161,14 @@ var Argument = function(name, description, options) {
   }
 
   this._names = this._name.split(delimiter);
+  this._extra = this._name.replace(/^[^\[<]*((\[|<).*)/, "$1");
+  //var space = this._name.replace(/[^\s]+$/, "");
+  //console.dir(this._name);
+  //console.dir(this._extra);
+  //console.log('space "%s"', space);
   for(var i = 0;i < this._names.length;i++) {
     if(/^(\[|<)/.test(this._names[i])) {
-      this._extra = this._names.slice(i).join(' ');
+      //this._extra = this._names.slice(i).join(' ');
       this._names = this._names.slice(0, i);
       break;
     }
