@@ -32,9 +32,12 @@ var mutators = {
 }
 
 var k, keys;
-var delimiter = /[ ,|]+/;
-var required = /^</;
-var multiple = /\.\.\./;
+var re = {
+  delimiter: function(){return /[ ,|]+/;},
+  required: function(){return /^=?</;},
+  multiple: function(){return /\.\.\./;},
+  extra: function(){return /^[^\[<]*((\[|<).*)/;}
+}
 
 function initialize(options, properties) {
   for(var z in options) {
@@ -55,7 +58,7 @@ function getKey(names) {
   var name = this._name;
   if(typeof names == 'string') {
     name = names;
-    names = names.split(delimiter);
+    names = names.split(re.delimiter());
   }
   var k = names.reduce(
     function (a, b) { return a.length > b.length ? a : b; });
@@ -63,6 +66,33 @@ function getKey(names) {
   return camelcase(k.toLowerCase());
 }
 
+/**
+ *  Retrieve the extra portion of the option name.
+ *
+ *  Note this also updates the names array to not include
+ *  the extra portion.
+ */
+function getExtra() {
+  this._extra = this._name.replace(re.extra(), "$1");
+  for(var i = 0;i < this._names.length;i++) {
+    if(/^(\[|<)/.test(this._names[i])) {
+      this._names = this._names.slice(0, i);
+      break;
+    }
+  }
+  var scope = this;
+  this._names.forEach(function(name, index, arr) {
+    var bracket = name.indexOf('[');
+    var angle = name.indexOf('<');
+    var ind;
+    if(~bracket || ~angle) {
+      ind = ~bracket ? bracket : angle;
+      scope._extra = name.substr(ind);
+      name = name.substr(0, ind);
+      arr[index] = name;
+    }
+  })
+}
 
 var EventProxy = {
   setMaxListeners: function() {
@@ -92,13 +122,6 @@ var EventProxy = {
 }
 
 var enumerable = process.env.CLI_TOOLKIT_DEBUG ? true : false;
-
-function toString(delimiter) {
-  if(!arguments.length) return Object.prototype.toString.call(this);
-  delimiter = delimiter || ' | ';
-  var names = this.names();
-  return names.join(delimiter);
-}
 
 function define(obj, name, value, writable) {
   writable = writable || false;
@@ -160,45 +183,28 @@ var Argument = function(name, description, options) {
     throw new TypeError('Invalid argument name \'' + this._name + '\'');
   }
 
-  this._names = this._name.split(delimiter);
-  this._extra = this._name.replace(/^[^\[<]*((\[|<).*)/, "$1");
-  //var space = this._name.replace(/[^\s]+$/, "");
-  //console.dir(this._name);
-  //console.dir(this._extra);
-  //console.log('space "%s"', space);
-  for(var i = 0;i < this._names.length;i++) {
-    if(/^(\[|<)/.test(this._names[i])) {
-      //this._extra = this._names.slice(i).join(' ');
-      this._names = this._names.slice(0, i);
-      break;
-    }
-  }
-  var scope = this;
-  this._names.forEach(function(name, index, arr) {
-    var bracket = name.indexOf('[');
-    var angle = name.indexOf('<');
-    var ind;
-    if(~bracket || ~angle) {
-      ind = ~bracket ? bracket : angle;
-      scope._extra = name.substr(ind);
-      name = name.substr(0, ind);
-      arr[index] = name;
-    }
-  })
-  if(required.test(this._extra)) {
+  this._names = this._name.split(re.delimiter());
+  getExtra.call(this);
+  if(re.required().test(this._extra)) {
     this._optional = false;
   }
-  if(multiple.test(this._extra)) {
+  if(re.multiple().test(this._extra)) {
     this._multiple = true;
   }
   this._key = getKey.call(this);
 }
 
-define(Argument.prototype, 'toString', toString, false);
-
 for(k in EventProxy) {
   define(Argument.prototype, k, EventProxy[k], false);
 }
+
+function toString(delimiter) {
+  if(!arguments.length) return Object.prototype.toString.call(this);
+  delimiter = delimiter || ' | ';
+  var names = this.names();
+  return names.join(delimiter);
+}
+define(Argument.prototype, 'toString', toString, false);
 
 /**
  *  Determines whether an array consists solely of functions
@@ -281,7 +287,7 @@ var Command = function(name, description, options) {
     throw new TypeError('Invalid command name \'' + this._name + '\'');
   }
 
-  this._names = this._name.split(delimiter);
+  this._names = this._name.split(re.delimiter());
   this._key = getKey.call(this);
 }
 
@@ -418,6 +424,7 @@ function create(package, name, description, clazz) {
 }
 
 module.exports = create;
+module.exports.re = re;
 module.exports.define = define;
 module.exports.key = getKey;
 module.exports.Program = Program;
