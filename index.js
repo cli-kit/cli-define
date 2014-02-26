@@ -54,17 +54,40 @@ function initialize(options, properties) {
  *
  *  @param names Array of names or raw string name (optional).
  */
-function getKey(names) {
+function getKey(names, name) {
   var k, names = names || this._names;
-  var name = this._name;
+  name = name || this._name;
   if(typeof names == 'string') {
     name = names;
     names = names.split(re.delimiter());
+  }
+  names = names.slice(0);
+  if(this._extra) {
+    var j = names.length -1;
+    var nm = names[j];
+    while(re.extra().test(nm) || re.multiple().test(nm)) {
+      // allow for flush extra values
+      if(/^-+/.test(nm)) {
+        names[j] = nm.replace(re.extra(), "$1");
+      }else{
+        names.pop();
+      }
+      nm = names[--j];
+    }
+    this._names = sortNames(names);
   }
   var k = names.reduce(
     function (a, b) { return a.length > b.length ? a : b; });
   k = k.replace(/^-+/, '');
   return camelcase(k.toLowerCase());
+}
+
+function sortNames(names) {
+  // sort short options before long options
+  return names.sort(function(a, b) {
+    var re = /^-[^-]/;
+    return re.test(a) ? -1 : re.test(b) ? 1 : 0;
+  });
 }
 
 /**
@@ -74,16 +97,18 @@ function getKey(names) {
  *  the extra portion.
  */
 function getExtra() {
+  if(re.no().test(this._name)) {
+    this._extra = false;
+    return;
+  }
   if(!re.extra().test(this._name)) return;
   this._extra = this._name.replace(re.extra(), "$2");
+  //console.log(this._extra);
   var name = this._name.replace(re.extra(), "$1");
+  //console.log('name: %s', name);
   this._names = name.split(re.delimiter());
   if(!this._names[this._names.length - 1]) this._names.pop();
-  // sort short options before long options
-  this._names.sort(function(a, b) {
-    var re = /^-[^-]/;
-    return re.test(a) ? -1 : re.test(b) ? 1 : 0;
-  });
+  this._names = sortNames(this._names);
 }
 
 var EventProxy = {
@@ -177,11 +202,13 @@ var Argument = function(name, description, options) {
 
   // strip no prefixes
   var no = re.no();
+  var name = '' + this._name;
   if((this instanceof Flag) && no.test(this._name)) {
-    this._name = this._name.replace(no, '');
+    name = this._name.replace(no, '');
   }
 
   this._names = this._name.split(re.delimiter());
+  //console.dir(this._names);
   getExtra.call(this);
   if(re.required().test(this._extra)) {
     this._optional = false;
@@ -189,7 +216,8 @@ var Argument = function(name, description, options) {
   if(re.multiple().test(this._extra)) {
     this._multiple = true;
   }
-  this._key = getKey.call(this);
+  this._key = getKey.call(this, name);
+  //console.log('key', this._key);
 }
 
 for(k in EventProxy) {
@@ -199,10 +227,26 @@ for(k in EventProxy) {
 function toString(delimiter) {
   if(!arguments.length) return Object.prototype.toString.call(this);
   delimiter = delimiter || ' | ';
-  var names = this.names();
+  var names = sortNames(this.names());
   return names.join(delimiter);
 }
 define(Argument.prototype, 'toString', toString, false);
+
+
+/**
+ *  Retrieve a standardized string to use when listing options.
+ */
+getOptionString = function(delimiter, assignment) {
+  assignment = assignment || '=';
+  delimiter = delimiter || ', ';
+  var extra = this.extra() ? this.extra() || '' : '';
+  if(extra) {
+    extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
+    extra = assignment + extra;
+  }
+  return this.toString(delimiter) + extra;
+}
+define(Argument.prototype, 'getOptionString', getOptionString, false);
 
 /**
  *  Determines whether an array consists solely of functions

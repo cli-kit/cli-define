@@ -6,6 +6,7 @@ var Option = require('../..').Option;
 describe('cli-define:', function() {
   it('should define extra (optional)', function(done) {
     cli.option('-t, --type [type]', 'a mime type')
+    //console.log('key: ', cli._options.type.key());
     expect(cli._options.type.extra()).to.eql('[type]');
     expect(cli._options.type.names()).to.eql(['-t', '--type']);
     done();
