@@ -242,15 +242,18 @@ define(Argument.prototype, 'toString', toString, false);
 getOptionString = function(delimiter, assignment, names, extra) {
   assignment = assignment || '=';
   delimiter = delimiter || ', ';
+  extra = extra || '';
   var opt = typeof(this.extra) === 'function';
   if(opt) {
+    // use extracted extra data assigned to the option
     if(!extra) {
-      extra = this.extra() ? this.extra() || '' : '';
+      extra = this.extra() || '';
       if(extra) {
         extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
         extra = assignment + extra;
       }
     }else{
+      // custom extra specified
       extra = assignment + extra;
     }
   }
