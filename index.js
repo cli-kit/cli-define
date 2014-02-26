@@ -239,14 +239,18 @@ define(Argument.prototype, 'toString', toString, false);
 /**
  *  Retrieve a standardized string to use when listing options.
  */
-getOptionString = function(delimiter, assignment, names) {
+getOptionString = function(delimiter, assignment, names, extra) {
   assignment = assignment || '=';
   delimiter = delimiter || ', ';
   var opt = typeof(this.extra) === 'function';
   if(opt) {
-    var extra = this.extra() ? this.extra() || '' : '';
-    if(extra) {
-      extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
+    if(!extra) {
+      extra = this.extra() ? this.extra() || '' : '';
+      if(extra) {
+        extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
+        extra = assignment + extra;
+      }
+    }else{
       extra = assignment + extra;
     }
   }
