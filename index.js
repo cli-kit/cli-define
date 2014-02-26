@@ -376,7 +376,7 @@ function option(name, description, options, coerce, value) {
       clazz = Flag;
     }
   }
-  var opt = (name instanceof clazz) ? name
+  var opt = (name instanceof Option) || (name instanceof Flag) ? name
     : new clazz(name, description, options, coerce, value);
   this._options[opt.key()] = opt;
   return this;
