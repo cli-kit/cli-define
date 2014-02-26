@@ -36,7 +36,8 @@ var re = {
   delimiter: function(){return /[ ,|]+/;},
   required: function(){return /^=?</;},
   multiple: function(){return /\.\.\./;},
-  extra: function(){return /^([^=\[<]*)((=|\[|<).*)/;}
+  extra: function(){return /^([^=\[<]*)((=|\[|<).*)/;},
+  no: function(){return /(\[no-?\]-?)/;}
 }
 
 function initialize(options, properties) {
@@ -172,6 +173,12 @@ var Argument = function(name, description, options) {
 
   if(!this._name || typeof this._name !== 'string') {
     throw new TypeError('Invalid argument name \'' + this._name + '\'');
+  }
+
+  // strip no prefixes
+  var no = re.no();
+  if((this instanceof Flag) && no.test(this._name)) {
+    this._name = this._name.replace(no, '');
   }
 
   this._names = this._name.split(re.delimiter());
@@ -318,8 +325,10 @@ define(Command.prototype, 'command', command, false);
  */
 function option(name, description, options, coerce, value) {
   var clazz = Option;
-  if(typeof name == 'string' && !/[<\[]/.test(name)) {
-    clazz = Flag;
+  if(typeof name === 'string') {
+    if(re.no().test(name) || !re.extra().test(name)) {
+      clazz = Flag;
+    }
   }
   var opt = (name instanceof clazz) ? name
     : new clazz(name, description, options, coerce, value);
