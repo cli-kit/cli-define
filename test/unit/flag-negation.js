@@ -18,9 +18,14 @@ describe('cli-define:', function() {
   });
   it('should define flag with --[no]-color', function(done) {
     cli.option('--[no]-color', 'use ansi colors')
-    expect(cli._options.color).to.be.an
+    var opt = cli._options.color;
+    expect(opt).to.be.an
       .instanceof(Flag);
-    expect(cli._options.color.value()).to.eql(undefined);
+    expect(opt.value()).to.eql(undefined);
+    expect(opt.key()).to.eql('color');
+    expect(opt.name()).to.eql('--[no]-color');
+    expect(opt.names()).to.eql(['--[no]-color']);
+    expect(opt.getOptionString()).to.eql('--[no]-color');
     done();
   });
   it('should define flag with --[no-]color', function(done) {
