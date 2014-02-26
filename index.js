@@ -240,7 +240,7 @@ define(Argument.prototype, 'toString', toString, false);
 getOptionString = function(delimiter, assignment) {
   assignment = assignment || '=';
   delimiter = delimiter || ', ';
-  var extra = this.extra() ? this.extra() || '' : '';
+  var extra = (this.extra && this.extra()) ? this.extra() || '' : '';
   if(extra) {
     extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
     extra = assignment + extra;
