@@ -37,7 +37,8 @@ var re = {
   required: function(){return /^=?</;},
   multiple: function(){return /\.\.\./;},
   extra: function(){return /^([^=\[<]*)((=|\[|<).*)/;},
-  no: function(){return /(\[no-?\]-?)/;}
+  no: function(){return /(\[no-?\]-?)/;},
+  nor: function(){return /(\[?no-?\]?-?)/;}
 }
 
 function initialize(options, properties) {
