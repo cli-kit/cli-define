@@ -242,7 +242,7 @@ util.inherits(Option, Argument);
 var Flag = function() {
   Argument.apply(this, arguments);
   //console.log('Flag %s %s', this._name, this._description);
-  this._value = false;
+  //this._value = false;
 }
 
 util.inherits(Flag, Argument);

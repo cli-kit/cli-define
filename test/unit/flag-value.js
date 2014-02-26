@@ -8,7 +8,7 @@ describe('cli-define:', function() {
     cli.option('--color', 'use ansi colors')
     expect(cli._options.color).to.be.an
       .instanceof(Flag);
-    expect(cli._options.color.value()).to.eql(false);
+    expect(cli._options.color.value()).to.eql(undefined);
     done();
   });
   it('should define flag with default value', function(done) {
@@ -16,10 +16,10 @@ describe('cli-define:', function() {
     // NOTE: must have both options for help etc.
     expect(cli._options.color).to.be.an
       .instanceof(Flag);
-    expect(cli._options.color.value()).to.eql(false);
+    expect(cli._options.color.value()).to.eql(undefined);
     expect(cli._options.noColor).to.be.an
       .instanceof(Flag);
-    expect(cli._options.noColor.value()).to.eql(false);
+    expect(cli._options.noColor.value()).to.eql(undefined);
     done();
   });
 })
