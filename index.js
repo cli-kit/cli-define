@@ -224,10 +224,13 @@ for(k in EventProxy) {
   define(Argument.prototype, k, EventProxy[k], false);
 }
 
-function toString(delimiter) {
+function toString(delimiter, names) {
   if(!arguments.length) return Object.prototype.toString.call(this);
+  names = names || this.names();
+  var opt = typeof(this.extra) === 'function';
   delimiter = delimiter || ' | ';
-  var names = sortNames(this.names());
+  // TODO: sort commands correctly
+  names = sortNames(names);
   return names.join(delimiter);
 }
 define(Argument.prototype, 'toString', toString, false);
@@ -236,15 +239,18 @@ define(Argument.prototype, 'toString', toString, false);
 /**
  *  Retrieve a standardized string to use when listing options.
  */
-getOptionString = function(delimiter, assignment) {
+getOptionString = function(delimiter, assignment, names) {
   assignment = assignment || '=';
   delimiter = delimiter || ', ';
-  var extra = (this.extra && this.extra()) ? this.extra() || '' : '';
-  if(extra) {
-    extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
-    extra = assignment + extra;
+  var opt = typeof(this.extra) === 'function';
+  if(opt) {
+    var extra = this.extra() ? this.extra() || '' : '';
+    if(extra) {
+      extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
+      extra = assignment + extra;
+    }
   }
-  return this.toString(delimiter) + extra;
+  return this.toString(delimiter, names) + extra;
 }
 define(Argument.prototype, 'getOptionString', getOptionString, false);
 
