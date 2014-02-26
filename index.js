@@ -333,6 +333,8 @@ var Command = function(name, description, options) {
   this._key = getKey.call(this);
 }
 
+
+define(Command.prototype, 'getOptionString', getOptionString, false);
 define(Command.prototype, 'toString', toString, false);
 
 for(k in EventProxy) {
