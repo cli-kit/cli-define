@@ -13,7 +13,6 @@ var mutators = {
     key: true,
     name: true,
     description: true,
-    action: true,
     last: true
   },
   arg: {
@@ -327,6 +326,7 @@ var Command = function(name, description, options) {
   define(this, '_name', name || '', true);
   define(this, '_description', description || '', true);
   define(this, '_key', '', true);
+  define(this, '_exec', {}, false);
   define(this, '_action', undefined, true);
   define(this, '_names', undefined, true);
   define(this, '_last', undefined, true);
@@ -350,9 +350,19 @@ var Command = function(name, description, options) {
   this._key = getKey.call(this);
 }
 
-
 define(Command.prototype, 'getOptionString', getOptionString, false);
 define(Command.prototype, 'toString', toString, false);
+
+// define action so we can clear execs list
+function action(value) {
+  if(!arguments.length) return this._action;
+  this._action = value;
+  if(this.parent() && this.parent()._exec) {
+    delete this.parent()._exec[this.key()];
+  }
+  return this;
+}
+define(Command.prototype, 'action', action, false);
 
 for(k in EventProxy) {
   define(Command.prototype, k, EventProxy[k], false);
