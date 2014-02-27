@@ -21,7 +21,7 @@ describe('cli-define:', function() {
   it('should trigger events on option', function(done) {
     var opts = {
       name: '-v, --verbose',
-      description: 'verbose option'
+      description: '*verbose* option'
     };
     var arg = new Option(opts);
     arg.setMaxListeners(10);

@@ -74,7 +74,6 @@ function description(description) {
   if(!arguments.length) return this._description;
   if(description && typeof description === 'string') {
     description = new Description(description);
-    console.dir(description);
   }
   this._description = description;
   return this;
