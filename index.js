@@ -489,6 +489,7 @@ function create(package, name, description, clazz) {
 module.exports = create;
 module.exports.re = re;
 module.exports.define = define;
+module.exports.initialize = initialize;
 module.exports.key = getKey;
 module.exports.Program = Program;
 module.exports.Command = Command;
