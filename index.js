@@ -12,7 +12,8 @@ var mutators = {
     key: true,
     name: true,
     description: true,
-    action: true
+    action: true,
+    last: true
   },
   arg: {
     names: false,
@@ -326,6 +327,7 @@ var Command = function(name, description, options) {
   define(this, '_key', '', true);
   define(this, '_action', undefined, true);
   define(this, '_names', undefined, true);
+  define(this, '_last', undefined, true);
   //define(this, '_package', undefined, true);
 
   // event emitter
@@ -375,6 +377,7 @@ function command(name, description, options) {
   var opt = (name instanceof Command) ? name
     : new Command(name, description, options);
   this._commands[opt.key()] = opt;
+  this._last = this._commands[opt.key()];
   return description ? this : opt;
 }
 define(Command.prototype, 'command', command, false);
@@ -392,6 +395,7 @@ function option(name, description, options, coerce, value) {
   var opt = (name instanceof Option) || (name instanceof Flag) ? name
     : new clazz(name, description, options, coerce, value);
   this._options[opt.key()] = opt;
+  this._last = this._options[opt.key()];
   return this;
 }
 define(Command.prototype, 'option', option, false);
