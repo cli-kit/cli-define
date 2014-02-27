@@ -75,6 +75,7 @@ function description(description) {
   if(description && typeof description === 'string') {
     description = new Description(description);
   }
+  //console.log('set description %j', description);
   this._description = description;
   return this;
 }
@@ -195,7 +196,7 @@ function define(obj, name, value, writable) {
 var Argument = function(name, description, options) {
   if(typeof name == 'object') options = name;
   define(this, '_name', name, true);
-  define(this, '_description', description || '', true);
+  define(this, '_description', '', true);
   define(this, '_key', '', true);
   define(this, '_optional', true, true);
   define(this, '_multiple', false, true);
@@ -210,6 +211,10 @@ var Argument = function(name, description, options) {
   define(this, '_events', undefined, true);
   define(this, '_maxListeners', undefined, true);
   define(this, 'domain', undefined, true);
+
+  // must set description this way to get the plain
+  // text and markdown descriptions
+  this.description(description || '');
 
   if(options === JSON) {
     this._converter = JSON;
