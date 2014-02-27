@@ -8,7 +8,7 @@ describe('cli-define:', function() {
     var description = 'a mock program';
     var program = cli(null, name, description);
     expect(program.name()).to.eql(name);
-    expect(program.description()).to.eql(description);
+    expect('' + program.description()).to.eql(description);
     //expect(cli._options.type.optional).to.eql(true);
     done();
   });

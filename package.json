@@ -22,7 +22,8 @@
     "option"
   ],
   "dependencies": {
-    "cli-util": "~1.1.5"
+    "cli-util": "~1.1.12",
+    "markzero": "~0.1.0"
   },
   "devDependencies": {
     "mocha": "~1.17.0",

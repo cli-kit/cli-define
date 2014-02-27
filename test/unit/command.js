@@ -30,7 +30,7 @@ describe('cli-define:', function() {
     };
     var arg = new Command(opts);
     expect(arg.name()).to.eql(opts.name);
-    expect(arg.description()).to.eql(opts.description);
+    expect('' + arg.description()).to.eql(opts.description);
     expect('value' in arg).to.eql(false);
     done();
   });

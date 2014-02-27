@@ -2,7 +2,13 @@ var events = require('events');
 var fs = require('fs');
 var path = require('path'), basename = path.basename;
 var util = require('util');
-var camelcase = require('cli-util').camelcase;
+var utils = require('cli-util');
+var camelcase = utils.camelcase;
+var rtrim = utils.rtrim;
+var markzero = require('markzero');
+var marked = markzero.marked;
+var Parser = markzero.Parser;
+var TextRenderer = markzero.TextRenderer;
 
 var mutators = {
   cmd: {
@@ -12,7 +18,7 @@ var mutators = {
     names: false,
     key: true,
     name: true,
-    description: true,
+    //description: true,
     last: true
   },
   arg: {
@@ -24,7 +30,7 @@ var mutators = {
     value: true,
     converter: true,
     extra: true,
-    description: true,
+    //description: true,
     action: true
   },
   prg: {
@@ -45,6 +51,33 @@ function initialize(options, properties) {
   for(var z in options) {
     if(~properties.indexOf(z) && options[z]) this[z](options[z]);
   }
+  if(options.description) this.description(options.description);
+  if(options.action && typeof this.action === 'function') {
+    this.action(options.action);
+  }
+}
+
+var Description = function(md) {
+  this.md = '' + md;
+  var lexer = new marked.Lexer();
+  var tokens = lexer.lex(this.md);
+  var renderer = new TextRenderer;
+  var parser = new Parser({renderer: renderer});
+  this.txt =  rtrim(parser.parse(tokens));
+}
+
+Description.prototype.toString = function() {
+  return this.txt;
+}
+
+function description(description) {
+  if(!arguments.length) return this._description;
+  if(description && typeof description === 'string') {
+    description = new Description(description);
+    console.dir(description);
+  }
+  this._description = description;
+  return this;
 }
 
 /**
@@ -220,6 +253,7 @@ var Argument = function(name, description, options) {
   this._key = getKey.call(this, name);
   //console.log('key', this._key);
 }
+define(Argument.prototype, 'description', description, false);
 
 for(k in EventProxy) {
   define(Argument.prototype, k, EventProxy[k], false);
@@ -350,6 +384,7 @@ var Command = function(name, description, options) {
   this._key = getKey.call(this);
 }
 
+define(Command.prototype, 'description', description, false);
 define(Command.prototype, 'getOptionString', getOptionString, false);
 define(Command.prototype, 'toString', toString, false);
 
@@ -509,3 +544,4 @@ module.exports.Program = Program;
 module.exports.Command = Command;
 module.exports.Option = Option;
 module.exports.Flag = Flag;
+module.exports.Description = Description;
