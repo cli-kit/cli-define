@@ -6,6 +6,7 @@ var camelcase = require('cli-util').camelcase;
 
 var mutators = {
   cmd: {
+    parent: true,
     options: false,
     commands: false,
     names: false,
@@ -320,6 +321,7 @@ var Command = function(name, description, options) {
   if(typeof name == 'object') options = name;
 
   // private
+  define(this, '_parent', undefined, true);
   define(this, '_commands', {}, true);
   define(this, '_options', {}, true);
   define(this, '_name', name || '', true);
@@ -378,6 +380,7 @@ function command(name, description, options) {
     : new Command(name, description, options);
   this._commands[opt.key()] = opt;
   this._last = this._commands[opt.key()];
+  this._last.parent(this);
   return description ? this : opt;
 }
 define(Command.prototype, 'command', command, false);
