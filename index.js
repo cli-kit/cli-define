@@ -57,6 +57,11 @@ function initialize(options, properties) {
   }
 }
 
+function toDescription(desc) {
+  if(desc instanceof Description) return desc;
+  return new Description(desc);
+}
+
 var Description = function(md) {
   this.md = '' + md;
   var lexer = new marked.Lexer();
@@ -551,4 +556,5 @@ module.exports.Program = Program;
 module.exports.Command = Command;
 module.exports.Option = Option;
 module.exports.Flag = Flag;
+module.exports.toDescription = toDescription;
 module.exports.Description = Description;
