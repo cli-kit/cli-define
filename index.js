@@ -288,6 +288,9 @@ getOptionString = function(delimiter, assignment, names, extra) {
     if(!extra) {
       extra = this.extra() || '';
       if(extra) {
+        // collapse whitespace so that [file ...] becomes [file...]
+        extra = extra.replace(/\s+(.+)/, "$1");
+        // use a consistent assignment style
         extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
         extra = assignment + extra;
       }
