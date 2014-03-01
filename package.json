@@ -1,6 +1,6 @@
 {
   "name": "cli-define",
-  "version": "0.5.19",
+  "version": "0.5.20",
   "description": "Chainable argument builder for a command line interface",
   "author": "muji <noop@xpm.io>",
   "repository": {
