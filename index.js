@@ -57,6 +57,17 @@ function initialize(options, properties) {
   }
 }
 
+function getNoVariants(arg) {
+  if(!arg) return null;
+  var name = arg.name();
+  if(re.no().test(name)) {
+    var yes = name.replace(re.no(), '');
+    var no = name.replace(/^(-+)\[?(no)\]?-?(.*)/, "$1$2-$3");
+    return {yes: yes, no: no};
+  }
+  return false;
+}
+
 function toDescription(desc) {
   if(desc instanceof Description) return desc;
   return new Description(desc);
@@ -558,3 +569,4 @@ module.exports.Option = Option;
 module.exports.Flag = Flag;
 module.exports.toDescription = toDescription;
 module.exports.Description = Description;
+module.exports.getNoVariants = getNoVariants;
