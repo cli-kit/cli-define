@@ -59,7 +59,7 @@ function initialize(options, properties) {
 
 function getNoVariants(arg) {
   if(!arg) return null;
-  var name = arg.name();
+  var name = (typeof arg === 'string') ? arg : arg.name();
   if(re.no().test(name)) {
     var yes = name.replace(re.no(), '');
     var no = name.replace(/^(-+)\[?(no)\]?-?(.*)/, "$1$2-$3");
