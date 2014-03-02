@@ -44,6 +44,7 @@ var re = {
   required: function(){return /^=?</;},
   multiple: function(){return /\.\.\./;},
   extra: function(){return /^([^=\[<]*)((=|\[|<).*)/;},
+  key: function(){return /^([^:]+)(\s+)?:(\s+)?(.*)/;},
   no: function(){return /(\[no-?\]-?)/;}
 }
 
@@ -105,11 +106,25 @@ function description(description) {
  *  @param names Array of names or raw string name (optional).
  */
 function getKey(names, name) {
-  var k, names = names || this._names;
+  var k, prefixed = false;
+  names = names || this._names;
   name = name || this._name;
   if(typeof names == 'string') {
     name = names;
     names = names.split(re.delimiter());
+  }
+  // handle key prefixes, in the form *name: -n, --file-name*
+  if(re.key().test(name)) {
+    k = name.replace(re.key(), "$1");
+    name = this._name = name.replace(re.key(), "$4");
+    names = this._names = name.split(re.delimiter());
+    //console.log('got new key names %j', names);
+    getExtra.call(this);
+    prefixed = true;
+    //console.log('got key prefix %s', k);
+    //console.log('got new key name %s', name);
+    //console.log('got new extra %s', this._extra);
+    //console.log('got new key names %j', this._names);
   }
   names = names.slice(0);
   if(this._extra) {
@@ -126,10 +141,12 @@ function getKey(names, name) {
     }
     this._names = sortNames(names);
   }
-  var k = names.reduce(
-    function (a, b) { return a.length > b.length ? a : b; });
-  k = k.replace(/^-+/, '');
-  return camelcase(k.toLowerCase());
+  if(!k) {
+    k = names.reduce(
+      function (a, b) { return a.length > b.length ? a : b; });
+    k = k.replace(/^-+/, '');
+  }
+  return prefixed ? k : camelcase(k.toLowerCase());
 }
 
 function sortNames(names) {
