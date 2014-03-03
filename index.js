@@ -466,6 +466,9 @@ function command(name, description, options) {
   this._commands[opt.key()] = opt;
   this._last = this._commands[opt.key()];
   this._last.parent(this);
+  if(description) {
+    this._exec[opt.key()] = opt;
+  }
   return description ? this : opt;
 }
 define(Command.prototype, 'command', command, false);
