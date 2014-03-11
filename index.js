@@ -441,13 +441,34 @@ function action(value) {
 }
 define(Command.prototype, 'action', action, false);
 
-// define action so we can clear execs list
 function getLongName() {
   return this._names.reduce(function(a, b) {
     return a.length > b.length ? a : b;
   });
 }
 define(Command.prototype, 'getLongName', getLongName, false);
+
+function getParents(reverse, include) {
+  var list = include ? [this] : [];
+  var p = this.parent();
+  while(p) {
+    list.push(p);
+    p = p.parent();
+  }
+  if(reverse) list.reverse();
+  return list;
+}
+define(Command.prototype, 'getParents', getParents, false);
+
+function getFullName(delimiter) {
+  delimiter = delimiter || '-';
+  var list = this.getParents(true, true);
+  list.forEach(function(cmd, index, arr) {
+    arr[index] = cmd.getLongName();
+  })
+  return list.join(delimiter);
+}
+define(Command.prototype, 'getFullName', getFullName, false);
 
 /**
  *  Get or set the command usage.
@@ -593,7 +614,7 @@ define(Program.prototype, 'package', package, false);
  */
 function create(package, name, description, clazz) {
   clazz = clazz || Program;
-  var program = new clazz(basename(process.argv[1]));
+  var program = new clazz(name || basename(process.argv[1]));
   program.package(package);
   if(name) program.name(name);
   if(description) program.description(description);
