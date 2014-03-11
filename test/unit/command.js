@@ -46,6 +46,7 @@ describe('cli-define:', function() {
     expect(s).to.eql('install | ins | i');
     s = arg.toString(', ');
     expect(s).to.eql('install, ins, i');
+    expect(arg.getLongName()).to.eql('install');
     done();
   });
   it('should use existing command', function(done) {

@@ -150,9 +150,9 @@ function getKey(names, name) {
 }
 
 function sortNames(names, cmd) {
-  // sort short options before long options
   return names.sort(function(a, b) {
     if(cmd) return b.length > a.length;
+    // sort short options before long options
     var re = /^-[^-]/;
     return re.test(a) ? -1 : re.test(b) ? 1 : 0;
   });
@@ -440,6 +440,14 @@ function action(value) {
   return this;
 }
 define(Command.prototype, 'action', action, false);
+
+// define action so we can clear execs list
+function getLongName() {
+  return this._names.reduce(function(a, b) {
+    return a.length > b.length ? a : b;
+  });
+}
+define(Command.prototype, 'getLongName', getLongName, false);
 
 /**
  *  Get or set the command usage.
