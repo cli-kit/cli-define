@@ -404,6 +404,7 @@ var Command = function(name, description, options) {
   define(this, '_action', undefined, true);
   define(this, '_names', undefined, true);
   define(this, '_last', undefined, true);
+  define(this, '_usage', undefined, true);
   //define(this, '_package', undefined, true);
 
   // event emitter
@@ -438,6 +439,19 @@ function action(value) {
   return this;
 }
 define(Command.prototype, 'action', action, false);
+
+/**
+ *  Get or set the command usage.
+ *
+ *  @param usage The command usage string.
+ */
+function usage(usage) {
+  if(!arguments.length) return this._usage;
+  this._usage = usage;
+  return this;
+}
+define(Command.prototype, 'usage', usage, false);
+
 
 for(k in EventProxy) {
   define(Command.prototype, k, EventProxy[k], false);
