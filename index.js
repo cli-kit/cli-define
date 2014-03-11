@@ -149,9 +149,10 @@ function getKey(names, name) {
   return prefixed ? k : camelcase(k.toLowerCase());
 }
 
-function sortNames(names) {
+function sortNames(names, cmd) {
   // sort short options before long options
   return names.sort(function(a, b) {
+    if(cmd) return b.length > a.length;
     var re = /^-[^-]/;
     return re.test(a) ? -1 : re.test(b) ? 1 : 0;
   });
@@ -302,7 +303,7 @@ function toString(delimiter, names) {
   var opt = typeof(this.extra) === 'function';
   delimiter = delimiter || ' | ';
   // TODO: sort commands correctly
-  names = sortNames(names);
+  names = sortNames(names, (this instanceof Command));
   return names.join(delimiter);
 }
 define(Argument.prototype, 'toString', toString, false);
