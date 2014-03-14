@@ -101,7 +101,7 @@ function description(description) {
 function detail(detail) {
   if(!arguments.length) return this._detail;
   if(detail && typeof detail === 'string') {
-    detail = new detail(detail);
+    detail = new Description(detail);
   }
   //console.log('set detail %j', detail);
   this._detail = detail;
