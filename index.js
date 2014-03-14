@@ -53,6 +53,7 @@ function initialize(options, properties) {
     if(~properties.indexOf(z) && options[z]) this[z](options[z]);
   }
   if(options.description) this.description(options.description);
+  if(options.detail) this.detail(options.detail);
   if(options.action && typeof this.action === 'function') {
     this.action(options.action);
   }
@@ -94,6 +95,16 @@ function description(description) {
   }
   //console.log('set description %j', description);
   this._description = description;
+  return this;
+}
+
+function detail(detail) {
+  if(!arguments.length) return this._detail;
+  if(detail && typeof detail === 'string') {
+    detail = new detail(detail);
+  }
+  //console.log('set detail %j', detail);
+  this._detail = detail;
   return this;
 }
 
@@ -231,6 +242,7 @@ var Argument = function(name, description, options) {
   if(typeof name == 'object') options = name;
   define(this, '_name', name, true);
   define(this, '_description', '', true);
+  define(this, '_detail', undefined, true);
   define(this, '_key', '', true);
   define(this, '_optional', true, true);
   define(this, '_multiple', false, true);
@@ -292,6 +304,7 @@ var Argument = function(name, description, options) {
   //console.log('key', this._key);
 }
 define(Argument.prototype, 'description', description, false);
+define(Argument.prototype, 'detail', detail, false);
 
 for(k in EventProxy) {
   define(Argument.prototype, k, EventProxy[k], false);
@@ -400,6 +413,7 @@ var Command = function(name, description, options) {
   define(this, '_options', {}, true);
   define(this, '_name', name || '', true);
   define(this, '_description', description || '', true);
+  define(this, '_detail', undefined, true);
   define(this, '_key', '', true);
   define(this, '_exec', {}, false);
   define(this, '_action', undefined, true);
@@ -427,6 +441,7 @@ var Command = function(name, description, options) {
 }
 
 define(Command.prototype, 'description', description, false);
+define(Command.prototype, 'detail', detail, false);
 define(Command.prototype, 'getOptionString', getOptionString, false);
 define(Command.prototype, 'toString', toString, false);
 
