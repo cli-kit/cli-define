@@ -44,7 +44,7 @@ var re = {
   required: function(){return /^=?</;},
   multiple: function(){return /\.\.\./;},
   extra: function(){return /^([^=\[<]*)((=|\[|<).*)/;},
-  key: function(){return /^([^:]+)(\s+)?:(\s+)?(.*)/;},
+  key: function(){return /^([^:\s]+)(\s+)?:(\s+)?(.*)/;},
   no: function(){return /(\[no-?\]-?)/;}
 }
 
@@ -132,10 +132,10 @@ function getKey(names, name) {
     //console.log('got new key names %j', names);
     getExtra.call(this);
     prefixed = true;
-    //console.log('got key prefix %s', k);
-    //console.log('got new key name %s', name);
-    //console.log('got new extra %s', this._extra);
-    //console.log('got new key names %j', this._names);
+    console.log('got key prefix "%s"', k);
+    console.log('got new key name "%s"', name);
+    console.log('got new extra %s', this._extra);
+    console.log('got new key names %j', this._names);
   }
   names = names.slice(0);
   if(this._extra) {
