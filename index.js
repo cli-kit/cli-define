@@ -1,3 +1,4 @@
+var EOL = require('os').EOL;
 var events = require('events');
 var fs = require('fs');
 var path = require('path'), basename = path.basename;
@@ -75,13 +76,26 @@ function toDescription(desc) {
   return new Description(desc);
 }
 
+var lexer = new marked.Lexer();
+var renderer = new TextRenderer;
+
 var Description = function(md) {
-  this.md = '' + md;
-  var lexer = new marked.Lexer();
-  var tokens = lexer.lex(this.md);
-  var renderer = new TextRenderer;
+  this.parse(md);
+}
+
+Description.prototype.parse = function(md, append) {
+  if(append && this.md) {
+    md = this.md = (this.md + md);
+  }else{
+    this.md = '' + md;
+  }
+  var tokens = lexer.lex(md);
   var parser = new Parser({renderer: renderer});
-  this.txt =  rtrim(parser.parse(tokens));
+  this.txt = rtrim(parser.parse(tokens));
+}
+
+Description.prototype.concat = function(md) {
+  this.parse(md, true);
 }
 
 Description.prototype.toString = function() {
