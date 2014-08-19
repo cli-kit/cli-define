@@ -76,7 +76,7 @@ function toDescription(desc) {
   return new Description(desc);
 }
 
-var lexer = new marked.Lexer();
+var lexer = new markzero.Lexer();
 var renderer = new TextRenderer;
 
 var Description = function(md) {
