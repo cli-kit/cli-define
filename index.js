@@ -663,3 +663,4 @@ module.exports.Flag = Flag;
 module.exports.toDescription = toDescription;
 module.exports.Description = Description;
 module.exports.getNoVariants = getNoVariants;
+module.exports.sortNames = sortNames;
