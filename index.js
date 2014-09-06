@@ -661,6 +661,7 @@ module.exports.Program = Program;
 module.exports.Command = Command;
 module.exports.Option = Option;
 module.exports.Flag = Flag;
+module.exports.sortNames = sortNames;
 module.exports.toDescription = toDescription;
 module.exports.Description = Description;
 module.exports.getNoVariants = getNoVariants;
