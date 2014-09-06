@@ -19,6 +19,7 @@ var mutators = {
     names: false,
     key: true,
     name: true,
+    extra: true,
     //description: true,
     last: true
   },
@@ -477,6 +478,13 @@ function getLongName() {
   });
 }
 define(Command.prototype, 'getLongName', getLongName, false);
+
+function getShortName() {
+  return this._names.reduce(function(a, b) {
+    return a.length < b.length ? a : b;
+  });
+}
+define(Command.prototype, 'getShortName', getShortName, false);
 
 function getParents(reverse, include) {
   var list = include ? [this] : [];
