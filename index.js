@@ -434,6 +434,7 @@ var Command = function(name, description, options) {
   define(this, '_names', undefined, true);
   define(this, '_last', undefined, true);
   define(this, '_usage', undefined, true);
+  define(this, '_extra', undefined, true);
   //define(this, '_package', undefined, true);
 
   // event emitter
@@ -663,4 +664,3 @@ module.exports.Flag = Flag;
 module.exports.toDescription = toDescription;
 module.exports.Description = Description;
 module.exports.getNoVariants = getNoVariants;
-module.exports.sortNames = sortNames;
