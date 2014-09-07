@@ -343,9 +343,9 @@ define(Argument.prototype, 'toString', toString, false);
 getOptionString = function(delimiter, assignment, names, extra) {
   assignment = assignment || '=';
   delimiter = delimiter || ', ';
-  extra = extra || '';
+  extra = extra === undefined ? '' : extra;
   var opt = typeof(this.extra) === 'function';
-  if(opt) {
+  if(opt && extra !== false) {
     // use extracted extra data assigned to the option
     if(!extra) {
       extra = this.extra() || '';
@@ -361,7 +361,7 @@ getOptionString = function(delimiter, assignment, names, extra) {
       extra = assignment + extra;
     }
   }
-  return this.toString(delimiter, names) + extra;
+  return this.toString(delimiter, names) + (extra ? extra : '');
 }
 define(Argument.prototype, 'getOptionString', getOptionString, false);
 
