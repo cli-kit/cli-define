@@ -354,14 +354,17 @@ getOptionString = function(delimiter, assignment, names, extra) {
         extra = extra.replace(/\s+(.+)/, "$1");
         // use a consistent assignment style
         extra = extra.replace(/^(.?)=(.*)$/, "$1$2");
-        extra = assignment + extra;
       }
-    }else{
-      // custom extra specified
-      extra = assignment + extra;
+    }else if(extra === true){
+      extra = this.extra();
     }
   }
-  return this.toString(delimiter, names) + (extra ? extra : '');
+  if(extra && typeof extra === 'string') {
+    // custom extra specified
+    extra = assignment + extra;
+  }
+  return this.toString(delimiter, names)
+    + (typeof extra === 'string' ? extra : '');
 }
 define(Argument.prototype, 'getOptionString', getOptionString, false);
 
