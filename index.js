@@ -489,21 +489,27 @@ function getShortName() {
 }
 define(Command.prototype, 'getShortName', getShortName, false);
 
-function getParents(reverse, include) {
+function getParents(reverse, include, omit) {
   var list = include ? [this] : [];
   var p = this.parent();
   while(p) {
     list.push(p);
     p = p.parent();
   }
+  // omit root program part
+  if(omit && list.length > 1) list.pop();
+
   if(reverse) list.reverse();
   return list;
 }
 define(Command.prototype, 'getParents', getParents, false);
 
-function getFullName(delimiter) {
+function getFullName(delimiter, reverse, include, omit) {
   delimiter = delimiter || '-';
-  var list = this.getParents(true, true);
+  reverse = reverse !== undefined ? reverse : true;
+  include = include !== undefined ? include : true;
+  omit = omit !== undefined ? omit : false;
+  var list = this.getParents(reverse, include, omit);
   list.forEach(function(cmd, index, arr) {
     arr[index] = cmd.getLongName();
   })
