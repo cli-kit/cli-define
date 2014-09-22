@@ -22,13 +22,13 @@
     "option"
   ],
   "dependencies": {
-    "cli-util": "~1.1.12",
-    "markzero": "^0.1.9"
+    "cli-util": "^1.1.19",
+    "markzero": "^0.1.27"
   },
   "devDependencies": {
-    "mocha": "~1.17.0",
-    "chai": "~1.9.0",
-    "istanbul": "~0.2.4"
+    "chai": "^1.9.1",
+    "istanbul": "^0.3.2",
+    "mocha": "^1.21.4"
   },
   "engine": [
     "node >= 0.10.21"
