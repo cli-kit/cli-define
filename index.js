@@ -11,6 +11,8 @@ var marked = markzero.marked;
 var Parser = markzero.Parser;
 var TextRenderer = markzero.TextRenderer;
 
+var helpers = require('./lib');
+
 var mutators = {
   cmd: {
     parent: true,
@@ -440,6 +442,13 @@ var Command = function(name, description, options) {
   define(this, '_usage', undefined, true);
   define(this, '_extra', undefined, true);
   //define(this, '_package', undefined, true);
+
+  // helper functions for finding commands, options etc.
+  var finder = {};
+  for(var k in helpers) {
+    finder[k] = helpers[k].bind(this);
+  }
+  define(this, 'finder', finder, false);
 
   // event emitter
   define(this, '_emitter', new events.EventEmitter(), false);
