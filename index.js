@@ -38,6 +38,7 @@ var mutators = {
     action: true
   },
   prg: {
+    configure: true,
     converter: true
   }
 }
@@ -610,6 +611,7 @@ var Program = function() {
   define(this, '_version', '0.0.1', true);
   define(this, '_package', undefined, true);
   define(this, '_converter', undefined, true);
+  define(this, '_configure', {}, true);
 }
 
 util.inherits(Program, Command);
@@ -624,6 +626,17 @@ keys.forEach(function(name) {
   }
   define(Program.prototype, name, write, false);
 })
+
+/**
+ *  Get and set the program version.
+ *
+ *  @param semver A specific version number.
+ */
+function version(semver) {
+  if(!arguments.length) return this._version;
+  this._version = semver;
+}
+define(Program.prototype, 'version', version, false);
 
 /**
  *  Set the program package descriptor.
