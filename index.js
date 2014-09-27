@@ -639,6 +639,20 @@ function version(semver) {
 define(Program.prototype, 'version', version, false);
 
 /**
+ *  Assign a value to an option.
+ *
+ *  @param arg The argument definition.
+ *  @param key The option key.
+ *  @param value The value for the option.
+ */
+function assign(arg, key, value) {
+  var receiver = this.configure().stash || this;
+  receiver[key] = value;
+  if(arg) arg.value(value);
+}
+define(Program.prototype, 'assign', assign, false);
+
+/**
  *  Set the program package descriptor.
  *
  *  @param path The path to the package descriptor or an existing
