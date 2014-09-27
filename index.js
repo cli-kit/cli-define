@@ -599,6 +599,7 @@ function flag(name, description, options, coerce, value) {
   var opt = (name instanceof Flag) ? name
     : new Flag(name, description, options, coerce, value);
   this._options[opt.key()] = opt;
+  this._last = this._options[opt.key()];
   return this;
 }
 define(Command.prototype, 'flag', flag, false);
