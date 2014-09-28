@@ -466,7 +466,7 @@ util.inherits(Flag, Argument);
 /**
  *  Represents a command argument.
  */
-var Command = function(name, description, options) {
+function Command(name, description, options) {
   //events.EventEmitter.call(this);
   if(typeof name == 'object') options = name;
 
