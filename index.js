@@ -22,6 +22,8 @@ var mutators = {
     key: true,
     name: true,
     extra: true,
+    options: true,
+    commands: true,
     //description: true,
     last: true
   },
@@ -55,7 +57,9 @@ var re = {
 
 function initialize(options, properties) {
   for(var z in options) {
-    if(~properties.indexOf(z) && options[z]) this[z](options[z]);
+    if(~properties.indexOf(z) && options[z]) {
+      this[z](options[z]);
+    }
   }
   if(options.description) this.description(options.description);
   if(options.detail) this.detail(options.detail);
@@ -350,15 +354,22 @@ function toObject(opts) {
     o.detail = this.detail();
   }
 
-  if(opts.all || opts.names && isFunction(this.names)) o.names = this.names();
-  if(opts.all || opts.extra && isFunction(this.extra)) o.extra = this.extra();
-  if(opts.all || opts.value && isFunction(this.value)) o.value = this.value();
+  if((opts.all || opts.names) && isFunction(this.names)) {
+    o.names = this.names();
+  }
+  if((opts.all || opts.extra) && isFunction(this.extra)) {
+    o.extra = this.extra();
+  }
+  //console.dir(this.value);
+  if((opts.all || opts.value) && isFunction(this.value)) {
+    o.value = this.value();
+  }
 
-  if(opts.all || opts.optional && isFunction(this.optional)) {
+  if((opts.all || opts.optional) && isFunction(this.optional)) {
     o.optional = this.optional();
   }
 
-  if(opts.all || opts.multiple && isFunction(this.multiple)) {
+  if((opts.all || opts.multiple) && isFunction(this.multiple)) {
     o.multiple = this.multiple();
 
   }
