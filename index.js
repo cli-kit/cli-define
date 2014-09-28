@@ -359,13 +359,18 @@ function toObject(opts) {
     o.detail = this.detail();
   }
 
+  if((opts.all || opts.sections) && isFunction(this.sections)) {
+    o.sections = this.sections();
+  }
+
   if((opts.all || opts.names) && isFunction(this.names)) {
     o.names = this.names();
   }
+
   if((opts.all || opts.extra) && isFunction(this.extra)) {
     o.extra = this.extra();
   }
-  //console.dir(this.value);
+
   if((opts.all || opts.value) && isFunction(this.value)) {
     o.value = this.value();
   }
@@ -378,6 +383,7 @@ function toObject(opts) {
     o.multiple = this.multiple();
 
   }
+
   if(opts.all || opts.methods) {
     if(isFunction(this.converter)) {
       o.converter = this.converter();
