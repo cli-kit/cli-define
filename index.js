@@ -391,6 +391,27 @@ function toObject(opts) {
       o.action = this.action();
     }
   }
+
+  function walk(args, target) {
+    var k, v;
+    for(k in args) {
+      v = args[k];
+      target[k] = v.toObject(opts);
+    }
+  }
+
+  if(opts.recurse !== false
+    && isFunction(this.options) && isFunction(this.commands)) {
+    if(Object.keys(this.options()).length) {
+      o.options = {};
+      walk(this.options(), o.options);
+    }
+    if(Object.keys(this.commands()).length) {
+      o.commands = {};
+      walk(this.commands(), o.commands);
+    }
+  }
+
   return o;
 }
 define(Argument.prototype, 'toObject', toObject, false);
