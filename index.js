@@ -18,6 +18,7 @@ var mutators = {
     parent: true,
     options: false,
     commands: false,
+    sections: true,
     names: false,
     key: true,
     name: true,
@@ -493,6 +494,7 @@ function Command(name, description, options) {
   define(this, '_parent', undefined, true);
   define(this, '_commands', {}, true);
   define(this, '_options', {}, true);
+  define(this, '_sections', {}, true);
   define(this, '_name', name || '', true);
   define(this, '_description', description || '', true);
   define(this, '_detail', undefined, true);
