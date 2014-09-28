@@ -328,41 +328,45 @@ for(k in EventProxy) {
   define(Argument.prototype, k, EventProxy[k], false);
 }
 
+function isFunction(f) {
+  return typeof f === 'function';
+}
+
 function toObject(opts) {
   opts = opts || {};
   var o = {};
   o.constructor = this.constructor;
   o.key = this.key();
 
-  if(opts.name !== false) {
+  if(opts.name !== false && isFunction(this.name)) {
     o.name = this.name();
   }
 
-  if(opts.description !== false) {
+  if(opts.description !== false && isFunction(this.description)) {
     o.description = this.description();
   }
 
-  if(opts.detail !== false) {
+  if(opts.detail !== false && isFunction(this.detail)) {
     o.detail = this.detail();
   }
 
-  if(opts.all || opts.names) o.names = this.names();
-  if(opts.all || opts.extra) o.extra = this.extra();
-  if(opts.all || opts.value) o.value = this.value();
+  if(opts.all || opts.names && isFunction(this.names)) o.names = this.names();
+  if(opts.all || opts.extra && isFunction(this.extra)) o.extra = this.extra();
+  if(opts.all || opts.value && isFunction(this.value)) o.value = this.value();
 
-  if(opts.all || opts.optional && this.optional) {
+  if(opts.all || opts.optional && isFunction(this.optional)) {
     o.optional = this.optional();
   }
 
-  if(opts.all || opts.multiple && this.multiple) {
+  if(opts.all || opts.multiple && isFunction(this.multiple)) {
     o.multiple = this.multiple();
 
   }
   if(opts.all || opts.methods) {
-    if(typeof this.converter === 'function') {
+    if(isFunction(this.converter)) {
       o.converter = this.converter();
     }
-    if(typeof this.action === 'function') {
+    if(isFunction(this.action)) {
       o.action = this.action();
     }
   }
