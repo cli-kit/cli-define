@@ -331,18 +331,40 @@ for(k in EventProxy) {
 function toObject(opts) {
   opts = opts || {};
   var o = {};
-  o.name = this.name();
-  o.description = this.description();
-  o.key = this.key();
   o.constructor = this.constructor;
+  o.key = this.key();
+
+  if(opts.name !== false) {
+    o.name = this.name();
+  }
+
+  if(opts.description !== false) {
+    o.description = this.description();
+  }
+
+  if(opts.detail !== false) {
+    o.detail = this.detail();
+  }
+
   if(opts.all || opts.names) o.names = this.names();
-  if(opts.all || opts.extra) o.names = this.extra();
-  if(opts.all || opts.value) o.names = this.value();
-  if(opts.all || opts.optional) o.optional = this.optional();
-  if(opts.all || opts.multiple) o.multiple = this.multiple();
+  if(opts.all || opts.extra) o.extra = this.extra();
+  if(opts.all || opts.value) o.value = this.value();
+
+  if(opts.all || opts.optional && this.optional) {
+    o.optional = this.optional();
+  }
+
+  if(opts.all || opts.multiple && this.multiple) {
+    o.multiple = this.multiple();
+
+  }
   if(opts.all || opts.methods) {
-    o.converter = this.converter;
-    o.action = this.action;
+    if(typeof this.converter === 'function') {
+      o.converter = this.converter();
+    }
+    if(typeof this.action === 'function') {
+      o.action = this.action();
+    }
   }
   return o;
 }
@@ -493,6 +515,7 @@ define(Command.prototype, 'description', description, false);
 define(Command.prototype, 'detail', detail, false);
 define(Command.prototype, 'getOptionString', getOptionString, false);
 define(Command.prototype, 'toString', toString, false);
+define(Command.prototype, 'toObject', toObject, false);
 
 // define action so we can clear execs list
 function action(value) {
