@@ -328,6 +328,25 @@ for(k in EventProxy) {
   define(Argument.prototype, k, EventProxy[k], false);
 }
 
+function toObject(opts) {
+  opts = opts || {};
+  var o = {};
+  o.name = this.name();
+  o.description = this.description();
+  o.key = this.key();
+  if(opts.all || opts.names) o.names = this.names();
+  if(opts.all || opts.extra) o.names = this.extra();
+  if(opts.all || opts.value) o.names = this.value();
+  if(opts.all || opts.optional) o.optional = this.optional();
+  if(opts.all || opts.multiple) o.multiple = this.multiple();
+  if(opts.all || opts.methods) {
+    o.converter = this.converter;
+    o.action = this.action;
+  }
+  return o;
+}
+define(Argument.prototype, 'toObject', toObject, false);
+
 function toString(delimiter, names) {
   if(!arguments.length) return Object.prototype.toString.call(this);
   names = names || this.names();
