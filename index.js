@@ -336,8 +336,9 @@ function isFunction(f) {
   return typeof f === 'function';
 }
 
-function toObject(opts) {
+function toObject(opts, depth) {
   opts = opts || {};
+  if(depth === undefined) depth = 0;
   var o = {};
   o.constructor = this.constructor;
   o.key = this.key();
@@ -396,8 +397,12 @@ function toObject(opts) {
     var k, v;
     for(k in args) {
       v = args[k];
-      target[k] = v.toObject(opts);
+      target[k] = v.toObject(opts, depth);
     }
+  }
+
+  if(typeof opts.item === 'function') {
+    o = opts.item.call(this, o, depth);
   }
 
   if(opts.recurse !== false
@@ -408,7 +413,9 @@ function toObject(opts) {
     }
     if(Object.keys(this.commands()).length) {
       o.commands = {};
+      ++depth;
       walk(this.commands(), o.commands);
+      --depth;
     }
   }
 
