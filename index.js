@@ -346,6 +346,10 @@ function toObject(opts) {
     o.name = this.name();
   }
 
+  if(opts.version !== false && isFunction(this.version)) {
+    o.version = this.version();
+  }
+
   if(opts.description !== false && isFunction(this.description)) {
     o.description = this.description();
   }
