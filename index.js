@@ -334,7 +334,7 @@ function toObject(opts) {
   o.name = this.name();
   o.description = this.description();
   o.key = this.key();
-  o.constructor = this.constructor;
+  o.constructor = (this instanceof Flag) ? Flag : Option;
   if(opts.all || opts.names) o.names = this.names();
   if(opts.all || opts.extra) o.names = this.extra();
   if(opts.all || opts.value) o.names = this.value();
