@@ -256,7 +256,7 @@ function define(obj, name, value, writable) {
  *  @param description The argument description.
  *  @param options The argument options or conversion function.
  */
-var Argument = function(name, description, options) {
+function Argument(name, description, options) {
   if(typeof name == 'object') options = name;
   define(this, '_name', name, true);
   define(this, '_description', '', true);
@@ -334,7 +334,7 @@ function toObject(opts) {
   o.name = this.name();
   o.description = this.description();
   o.key = this.key();
-  o.constructor = (this instanceof Flag) ? Flag : Option;
+  o.constructor = this.constructor;
   if(opts.all || opts.names) o.names = this.names();
   if(opts.all || opts.extra) o.names = this.extra();
   if(opts.all || opts.value) o.names = this.value();
@@ -424,7 +424,7 @@ keys.forEach(function(name) {
 /**
  *  Represents an option argument.
  */
-var Option = function() {
+function Option() {
   Argument.apply(this, arguments);
 }
 
@@ -433,7 +433,7 @@ util.inherits(Option, Argument);
 /**
  *  Represents a flag argument.
  */
-var Flag = function() {
+function Flag() {
   Argument.apply(this, arguments);
   //console.log('Flag %s %s', this._name, this._description);
   //this._value = false;
@@ -627,7 +627,7 @@ define(Command.prototype, 'flag', flag, false);
 /**
  *  Represents the program.
  */
-var Program = function() {
+function Program() {
   Command.apply(this, arguments);
   define(this, '_version', '0.0.1', true);
   define(this, '_package', undefined, true);
