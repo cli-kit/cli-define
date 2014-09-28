@@ -25,7 +25,6 @@ var mutators = {
     extra: true,
     options: true,
     commands: true,
-    //description: true,
     last: true
   },
   arg: {
@@ -37,12 +36,12 @@ var mutators = {
     value: true,
     converter: true,
     extra: true,
-    //description: true,
+    converter: true,
     action: true
   },
   prg: {
+    converter: true,
     configure: true,
-    converter: true
   }
 }
 
@@ -507,6 +506,7 @@ function Command(name, description, options) {
   define(this, '_key', '', true);
   define(this, '_exec', {}, false);
   define(this, '_action', undefined, true);
+  define(this, '_converter', undefined, true);
   define(this, '_names', undefined, true);
   define(this, '_last', undefined, true);
   define(this, '_usage', undefined, true);
@@ -681,7 +681,6 @@ function Program() {
   Command.apply(this, arguments);
   define(this, '_version', '0.0.1', true);
   define(this, '_package', undefined, true);
-  define(this, '_converter', undefined, true);
   define(this, '_configure', {}, true);
 }
 
