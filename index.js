@@ -607,6 +607,24 @@ define(Command.prototype, 'getOptionString', getOptionString, false);
 define(Command.prototype, 'toString', toString, false);
 define(Command.prototype, 'toObject', toObject, false);
 
+var creator = {
+  createOption: function(name, description, options) {
+    return new Option(name, description, options);
+  },
+  createFlag: function(name, description, options) {
+    return new Flag(name, description, options);
+  },
+  createCommand: function(name, description, options) {
+    return new Command(name, description, options);
+  }
+}
+
+// create* functions
+for(k in creator) {
+  define(Command.prototype, k, creator[k], false);
+}
+
+// is* functions
 for(k in is) {
   define(Command.prototype, k, is[k], false);
 }
