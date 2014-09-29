@@ -577,8 +577,18 @@ define(Command.prototype, 'toObject', toObject, false);
  */
 function options(value) {
   if(!arguments.length) return this._options;
-  console.dir('options mutator');
   this._options = value;
+
+  // convert plain objects with *name*
+  // to Option or Flag instances
+  var k, v, clazz;
+  for(k in this._options) {
+    v = this._options[k];
+    if(v && typeof v === 'object' && !(v instanceof Argument) && v.name) {
+      clazz = getClassByName(v.name);
+      this._options[k] = new clazz(v);
+    }
+  }
   return this;
 }
 define(Command.prototype, 'options', options, true);
@@ -588,8 +598,18 @@ define(Command.prototype, 'options', options, true);
  */
 function commands(value) {
   if(!arguments.length) return this._commands;
-  console.dir('commands mutator');
   this._commands = value;
+
+  // convert plain objects with *name*
+  // to Command instances
+  var k, v;
+  for(k in this._commands) {
+    v = this._commands[k];
+    if(v && typeof v === 'object' && !(v instanceof Command) && v.name) {
+      this._commands[k] = new Command(v);
+    }
+  }
+
   return this;
 }
 define(Command.prototype, 'commands', commands, true);
@@ -695,15 +715,24 @@ function command(name, description, options) {
 define(Command.prototype, 'command', command, false);
 
 /**
- *  Define an option argument.
+ *  Inspect an argument name and determine the class (type)
+ *  of argument: Option or Flag.
  */
-function option(name, description, options, coerce, value) {
+function getClassByName(name) {
   var clazz = Option;
   if(typeof name === 'string') {
     if(re.no().test(name) || !re.extra().test(name)) {
       clazz = Flag;
     }
   }
+  return clazz;
+}
+
+/**
+ *  Define an option argument.
+ */
+function option(name, description, options, coerce, value) {
+  var clazz = getClassByName(name);
   var opt = (name instanceof Option) || (name instanceof Flag) ? name
     : new clazz(name, description, options, coerce, value);
   this._options[opt.key()] = opt;
