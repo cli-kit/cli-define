@@ -572,6 +572,28 @@ define(Command.prototype, 'getOptionString', getOptionString, false);
 define(Command.prototype, 'toString', toString, false);
 define(Command.prototype, 'toObject', toObject, false);
 
+/**
+ *  Set options as an object group.
+ */
+function options(value) {
+  if(!arguments.length) return this._options;
+  console.dir('options mutator');
+  this._options = value;
+  return this;
+}
+define(Command.prototype, 'options', options, true);
+
+/**
+ *  Set commands as an object group.
+ */
+function commands(value) {
+  if(!arguments.length) return this._commands;
+  console.dir('commands mutator');
+  this._commands = value;
+  return this;
+}
+define(Command.prototype, 'commands', commands, true);
+
 // define action so we can clear execs list
 function action(value) {
   if(!arguments.length) return this._action;
@@ -637,13 +659,13 @@ function usage(usage) {
 }
 define(Command.prototype, 'usage', usage, false);
 
-
 for(k in EventProxy) {
   define(Command.prototype, k, EventProxy[k], false);
 }
 
 keys = Object.keys(mutators.cmd);
 keys.forEach(function(name) {
+  if(Command.prototype[name]) return;
   var read = function() {
     return this['_' + name];
   }
