@@ -332,6 +332,41 @@ for(k in EventProxy) {
   define(Argument.prototype, k, EventProxy[k], false);
 }
 
+// declare instanceof tests here so there is no
+// chance the instances are different between dependencies
+// - eg: module version conflict
+function isArgument() {
+  return (this instanceof Argument);
+}
+
+function isOption() {
+  return (this instanceof Option);
+}
+
+function isFlag() {
+  return (this instanceof Flag);
+}
+
+function isCommand() {
+  return (this instanceof Command);
+}
+
+function isProgram() {
+  return (this instanceof Program);
+}
+
+var is = {
+  isArgument: isArgument,
+  isOption: isOption,
+  isFlag: isFlag,
+  isCommand: isCommand,
+  isProgram: isProgram
+}
+
+for(k in is) {
+  define(Argument.prototype, k, is[k], false);
+}
+
 function isFunction(f) {
   return typeof f === 'function';
 }
@@ -571,6 +606,10 @@ define(Command.prototype, 'detail', detail, false);
 define(Command.prototype, 'getOptionString', getOptionString, false);
 define(Command.prototype, 'toString', toString, false);
 define(Command.prototype, 'toObject', toObject, false);
+
+for(k in is) {
+  define(Command.prototype, k, is[k], false);
+}
 
 /**
  *  Set options as an object group.
