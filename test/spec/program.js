@@ -30,6 +30,29 @@ describe('cli-define:', function() {
     expect(cli.getFullName()).to.eql('mock-program')
     expect(ls.getFullName()).to.eql('mock-program-list')
     expect(deps.getFullName()).to.eql('mock-program-list-dependencies');
+
+
+    // assign to program: no arg and no stash
+    cli.assign(null, 'mockProgramOption', '/mock/file/program/assign');
+
+    expect(cli.mockProgramOption).to.eql('/mock/file/program/assign');
+
+    cli.configure({stash: {}});
+
+    // assign to stash no arg
+    cli.assign(null, 'mockOption', '/mock/file/stash/assign');
+
+    expect(cli.configure().stash.mockOption).to.eql('/mock/file/stash/assign');
+
+    // assign to stash and arg
+    var opt = cli.createOption('--mock-option <value>', 'Mock option');
+    cli.option(opt);
+    cli.assign(opt, opt.key(), '/mock/file');
+
+    expect(cli.configure().stash.mockOption)
+      .to.eql(opt.value())
+      .to.eql('/mock/file');
+
     done();
   });
 })
