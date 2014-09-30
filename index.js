@@ -554,6 +554,15 @@ function options(value) {
 }
 define(Command.prototype, 'options', options, true);
 
+function hasOptions() {
+  for(var k in this._options) {
+    return true;
+  }
+  return false;
+}
+
+define(Command.prototype, 'hasOptions', hasOptions, true);
+
 /**
  *  Set commands as an object group.
  */
@@ -577,6 +586,15 @@ function commands(value) {
   return this;
 }
 define(Command.prototype, 'commands', commands, true);
+
+function hasCommands() {
+  for(var k in this._commands) {
+    return true;
+  }
+  return false;
+}
+
+define(Command.prototype, 'hasCommands', hasCommands, true);
 
 // define action so we can clear execs list
 function action(value) {
