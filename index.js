@@ -7,7 +7,7 @@ var events = require('events')
   , define = utils.define
 
   , EventProxy = require('./lib/event-proxy')
-  , Description = require('./lib/description')
+  , Description = require('cli-description')
   , mutators = require('./lib/mutators')
   , helpers = require('./lib/finder');
 
@@ -822,5 +822,4 @@ module.exports.Option = Option;
 module.exports.Flag = Flag;
 module.exports.Argument = Argument;
 module.exports.sortNames = sortNames;
-module.exports.toDescription = toDescription;
 module.exports.Description = Description;
