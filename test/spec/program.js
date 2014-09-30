@@ -6,13 +6,22 @@ var define = require('../..');
 
 describe('cli-define:', function() {
   it('should define subcommands', function(done) {
-    var semver = '1.0.0'
-      , usage = '<args> <cmd>';
-    var cli = define(pkgpath, 'mock-program');
-    expect(cli.name()).to.eql('mock-program');
+    var name = 'mock-program'
+      , semver = '1.0.0'
+      , usage = '<args> <cmd>'
+      , description = 'Mock program description.'
+      , detail = 'Mock program detail.';
+
+    var cli = define(pkgpath, name, description);
+    expect(cli.name()).to.eql(name);
 
     cli.version(semver);
     expect(cli.version()).to.eql(semver)
+
+    expect(cli.description().txt).to.eql(description);
+
+    cli.detail(detail);
+    expect(cli.detail().txt).to.eql(detail);
 
     cli.usage(usage);
     expect(cli.usage()).to.eql(usage);
