@@ -24,6 +24,7 @@ describe('cli-define:', function() {
     var deps = ls.command('deps, dependencies')
       .description('list package dependencies')
     expect(deps.getLongName()).to.eql('dependencies');
+    expect(deps.getShortName()).to.eql('deps');
     expect(ls.commands().dependencies).to.equal(deps);
     var parents = deps.getParents();
     expect(parents[0]).to.equal(ls);
