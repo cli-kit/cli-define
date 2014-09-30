@@ -67,6 +67,14 @@ describe('cli-define:', function() {
       .to.eql(opt.value())
       .to.eql('/mock/file');
 
+    var obj = cli.toObject({all: true, recuse: true});
+
+    console.dir(obj);
+
+    expect(obj.constructor).to.be.a('function');
+    expect(obj.name).to.be.a('string').to.eql(name);
+    expect(obj.version).to.be.a('string').to.eql(semver);
+
     done();
   });
 })
