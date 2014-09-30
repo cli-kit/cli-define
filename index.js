@@ -1,5 +1,4 @@
 var events = require('events')
-  , fs = require('fs')
   , path = require('path')
   , basename = path.basename
   , util = require('util')
@@ -786,12 +785,12 @@ function package(path) {
     return this._package;
   }
   var pkg;
-  if(path && typeof(path) === 'string' && fs.existsSync(path)) {
+  if(path && typeof(path) === 'string') {
     try {
       pkg = this._package = require(path);
     }catch(e) {
       throw new Error(util.format(
-        'package parse error %s (malformed json)', path));
+        'package error %s (%s)', path, e.message.toLowerCase()));
     }
   }else if(path && typeof path === 'object') {
     pkg = this._package = path;
