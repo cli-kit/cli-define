@@ -23,8 +23,7 @@
   ],
   "dependencies": {
     "cli-description": "^1.0.3",
-    "cli-util": "^1.1.26",
-    "markzero": "^0.1.27"
+    "cli-util": "^1.1.26"
   },
   "devDependencies": {
     "chai": "^1.9.1",
