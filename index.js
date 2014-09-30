@@ -545,6 +545,7 @@ function options(value) {
     if(v && typeof v === 'object' && !(v instanceof Argument) && v.name) {
       clazz = getClassByName(v.name);
       this._options[k] = new clazz(v);
+      //this._options[k].parent(this);
     }
   }
   return this;
@@ -565,6 +566,7 @@ function commands(value) {
     v = this._commands[k];
     if(v && typeof v === 'object' && !(v instanceof Command) && v.name) {
       this._commands[k] = new Command(v);
+      this._commands[k].parent(this);
     }
   }
 
