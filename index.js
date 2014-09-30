@@ -1,49 +1,13 @@
-var EOL = require('os').EOL;
-var events = require('events');
-var fs = require('fs');
-var path = require('path'), basename = path.basename;
-var util = require('util');
-var utils = require('cli-util');
-var camelcase = utils.camelcase;
-var rtrim = utils.rtrim;
-var markzero = require('markzero');
-var marked = markzero.marked;
-var Parser = markzero.Parser;
-var TextRenderer = markzero.TextRenderer;
-
-var helpers = require('./lib/finder');
-
-var mutators = {
-  cmd: {
-    parent: true,
-    options: false,
-    commands: false,
-    sections: true,
-    names: false,
-    key: true,
-    name: true,
-    extra: true,
-    options: true,
-    commands: true,
-    last: true
-  },
-  arg: {
-    names: false,
-    key: true,
-    name: true,
-    optional: true,
-    multiple: true,
-    value: true,
-    converter: true,
-    extra: true,
-    converter: true,
-    action: true
-  },
-  prg: {
-    converter: true,
-    configure: true,
-  }
-}
+var events = require('events')
+  , fs = require('fs')
+  , path = require('path')
+  , basename = path.basename
+  , util = require('util')
+  , utils = require('cli-util')
+  , camelcase = utils.camelcase
+  , Description = require('./lib/description')
+  , mutators = require('./lib/mutators')
+  , helpers = require('./lib/finder');
 
 var k, keys;
 var re = {
@@ -82,32 +46,6 @@ function getNoVariants(arg) {
 function toDescription(desc) {
   if(desc instanceof Description) return desc;
   return new Description(desc);
-}
-
-var lexer = new markzero.Lexer();
-var renderer = new TextRenderer;
-
-var Description = function(md) {
-  this.parse(md);
-}
-
-Description.prototype.parse = function(md, append) {
-  if(append && this.md) {
-    md = this.md = (this.md + md);
-  }else{
-    this.md = '' + md;
-  }
-  var tokens = lexer.lex(md);
-  var parser = new Parser({renderer: renderer});
-  this.txt = rtrim(parser.parse(tokens));
-}
-
-Description.prototype.concat = function(md) {
-  this.parse(md, true);
-}
-
-Description.prototype.toString = function() {
-  return this.txt;
 }
 
 function description(description) {
