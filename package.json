@@ -22,7 +22,7 @@
     "option"
   ],
   "dependencies": {
-    "cli-util": "^1.1.19",
+    "cli-util": "^1.1.26",
     "markzero": "^0.1.27"
   },
   "devDependencies": {

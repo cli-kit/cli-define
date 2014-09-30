@@ -4,6 +4,7 @@ var events = require('events')
   , util = require('util')
   , utils = require('cli-util')
   , camelcase = utils.camelcase
+  , define = utils.define
 
   , EventProxy = require('./lib/event-proxy')
   , Description = require('./lib/description')
@@ -31,22 +32,6 @@ function initialize(options, properties) {
   if(options.action && typeof this.action === 'function') {
     this.action(options.action);
   }
-}
-
-function getNoVariants(arg) {
-  if(!arg) return null;
-  var name = (typeof arg === 'string') ? arg : arg.name();
-  if(re.no().test(name)) {
-    var yes = name.replace(re.no(), '');
-    var no = name.replace(/^(-+)\[?(no)\]?-?(.*)/, "$1$2-$3");
-    return {yes: yes, no: no};
-  }
-  return false;
-}
-
-function toDescription(desc) {
-  if(desc instanceof Description) return desc;
-  return new Description(desc);
 }
 
 function description(description) {
@@ -151,19 +136,20 @@ function getExtra() {
   this._names = sortNames(this._names);
 }
 
-var enumerable = process.env.CLI_TOOLKIT_DEBUG ? true : false;
+//var enumerable = process.env.CLI_TOOLKIT_DEBUG ? true : false;
 
-function define(obj, name, value, writable) {
-  writable = writable || false;
-  Object.defineProperty(obj, name,
-    {
-      enumerable: enumerable,
-      configurable: false,
-      writable: writable,
-      value: value
-    }
-  );
-}
+//function define(obj, name, value, writable, enumerate) {
+  //writable = writable !== undefined ? writable : false;
+  //enumerate = enumerate !== undefined ? enumerate : enumerable;
+  //Object.defineProperty(obj, name,
+    //{
+      //enumerable: enumerate,
+      //configurable: false,
+      //writable: writable,
+      //value: value
+    //}
+  //);
+//}
 
 /**
  *  Abstract super class.
@@ -838,4 +824,3 @@ module.exports.Argument = Argument;
 module.exports.sortNames = sortNames;
 module.exports.toDescription = toDescription;
 module.exports.Description = Description;
-module.exports.getNoVariants = getNoVariants;
