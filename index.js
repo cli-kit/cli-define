@@ -281,7 +281,8 @@ function toObject(opts, depth) {
   }
 
   if(opts.version !== false && isFunction(this.version)) {
-    o.version = this.version();
+    // NOTE: do not call version(), CommandProgram will use middleware
+    o.version = this._version;
   }
 
   if(opts.description !== false && isFunction(this.description)) {

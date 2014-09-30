@@ -69,7 +69,7 @@ describe('cli-define:', function() {
 
     var obj = cli.toObject({all: true, recuse: true});
 
-    console.dir(obj);
+    //console.dir(obj);
 
     expect(obj.constructor).to.be.a('function');
     expect(obj.name).to.be.a('string').to.eql(name);
