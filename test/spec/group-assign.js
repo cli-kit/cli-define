@@ -43,6 +43,10 @@ describe('cli-define:', function() {
     }
 
     var cmd = new Command(opts);
+
+    expect(cmd.hasOptions()).to.eql(true);
+    expect(cmd.hasCommands()).to.eql(true);
+
     expect(cmd.options().mockFlagOption).to.be.instanceof(Flag);
     expect(cmd.options().mockOption).to.be.instanceof(Option);
     expect(cmd.commands().mockSubCommandOverride).to.be.instanceof(Command);
@@ -50,7 +54,11 @@ describe('cli-define:', function() {
     var sub = cmd.commands().mockSubCommandOverride;
     expect(sub.options().mockNestedFlagOption).to.be.instanceof(Flag);
     expect(sub.options().mockNestedOption).to.be.instanceof(Option);
-    expect(sub.commands().mockDeepCommand).to.be.instanceof(Command);
+    var deep = sub.commands().mockDeepCommand;
+    expect(deep).to.be.instanceof(Command);
+
+    expect(deep.hasOptions()).to.eql(false);
+    expect(deep.hasCommands()).to.eql(false);
 
     done();
   });
