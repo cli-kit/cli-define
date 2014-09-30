@@ -11,17 +11,20 @@ describe('cli-define:', function() {
   it('should assign option and command instances', function(done) {
     var opts = {
       name: 'mock-command',
+      key: 'mockCommand',
       options: {
         mockFlagOption: {
           name: '--mock-flag-option'
         },
         mockOption: {
-          name: '--mock-option <value>'
+          name: '--mock-option <value>',
+          key: 'mockOption'
         }
       },
       commands: {
         mockSubCommand: {
           name: 'mock-sub-command',
+          key: 'mockSubCommandOverride',
           options: {
             mockNestedFlagOption: {
               name: '--mock-nested-flag-option'
@@ -42,9 +45,9 @@ describe('cli-define:', function() {
     var cmd = new Command(opts);
     expect(cmd.options().mockFlagOption).to.be.instanceof(Flag);
     expect(cmd.options().mockOption).to.be.instanceof(Option);
-    expect(cmd.commands().mockSubCommand).to.be.instanceof(Command);
+    expect(cmd.commands().mockSubCommandOverride).to.be.instanceof(Command);
 
-    var sub = cmd.commands().mockSubCommand;
+    var sub = cmd.commands().mockSubCommandOverride;
     expect(sub.options().mockNestedFlagOption).to.be.instanceof(Flag);
     expect(sub.options().mockNestedOption).to.be.instanceof(Option);
     expect(sub.commands().mockDeepCommand).to.be.instanceof(Command);

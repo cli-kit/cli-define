@@ -543,8 +543,10 @@ function options(value) {
   for(k in this._options) {
     v = this._options[k];
     if(v && typeof v === 'object' && !(v instanceof Argument) && v.name) {
+      if(v.key) k = v.key;
       clazz = getClassByName(v.name);
       this._options[k] = new clazz(v);
+      this._options[k].key(k);
       //this._options[k].parent(this);
     }
   }
@@ -565,8 +567,10 @@ function commands(value) {
   for(k in this._commands) {
     v = this._commands[k];
     if(v && typeof v === 'object' && !(v instanceof Command) && v.name) {
+      if(v.key) k = v.key;
       this._commands[k] = new Command(v);
       this._commands[k].parent(this);
+      this._commands[k].key(k);
     }
   }
 
